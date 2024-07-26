@@ -1,0 +1,4 @@
+# Compile all of this
+file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS *.cpp)
+target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES})
+

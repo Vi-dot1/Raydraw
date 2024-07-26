@@ -1,0 +1,8 @@
+*. Invent an scalable UI (or find a lib that does that for you lol) { X }
+*. Add options to select different colors
+
+*. Add support for different brushes:
+    *. Create different brushes (*)
+    *. Find a way to change all this brushes seamlessly
+
+*. Create a dedicated Import/Export module for Canvases and Pngs
