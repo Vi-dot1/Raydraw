@@ -12,6 +12,8 @@ class Canvas
     size_t currenLayer=0, layerAmount=1;
 
     Vector2 cPos = (Vector2){0, 0};
+    int width, height;
+    bool changed = false;
 public:
     Canvas(int width, int height);
     ~Canvas();
@@ -21,6 +23,8 @@ public:
     void changeLayer(size_t);
     void addLayer();
 
-    void _draw(const int &_x, const int &_y);
+    void _draw(const float &_x, const float &_y);
     Image _exportImage();
+
+    inline Vector2 localCoord(Vector2 &coord) { return {coord.x-cPos.x, coord.y-cPos.y}; };
 };

@@ -7,7 +7,7 @@ extern "C"{
 class Brush
 {
 public:
-    static int brushSize;
+    static float brushSize;
     static Color brushColor;
-    virtual void _drawToLayer(RenderTexture2D&, Vector2&);
+    virtual void _drawToLayer(RenderTexture2D&, const Vector2&);
 };

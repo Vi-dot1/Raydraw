@@ -11,6 +11,7 @@ int screenHeight = 600, screenWidth = 800;
 int main(void)
 {
 	InitWindow(screenWidth, screenHeight, "Raydraw");
+	HideCursor();
 	SetTargetFPS(120);
 
 	Brush b;
@@ -30,18 +31,15 @@ int main(void)
             UnloadImage(image);
 		}
 
-
 		// Drawing to window
 		BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground((Color){120, 120, 120, 255});
 
 		canvas._draw(196, 0); // show canvas
-		b._drawToLayer(canvas.getCurrentLayer(), mpos);
-
-		// Draw a circle outline to indicate brush position
-		DrawCircleLinesV(mpos, Brush::brushSize, Brush::brushColor);
+		b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
 
 		drawGui();
+		DrawCircleLinesV(mpos, Brush::brushSize, Brush::brushColor);
 		EndDrawing();
 	}
 

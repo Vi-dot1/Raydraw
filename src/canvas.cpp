@@ -1,6 +1,7 @@
 #include "canvas.h"
 
-Canvas::Canvas(int width, int height)
+Canvas::Canvas(int _width, int _height)
+    : width(_width), height(_height)
 {
     layers[0] = LoadRenderTexture(width, height);
     
@@ -34,14 +35,16 @@ RenderTexture2D& Canvas::getCurrentLayer()
     return layers[currenLayer];
 }
 
-void Canvas::_draw(const int &_x, const int &_y)
+void Canvas::_draw(const float &_x, const float &_y)
 {
+    //if(!changed) return;
+
     for(size_t i=0; i<layerAmount; ++i)
     {
 		// NOTE: Render texture must be y-flipped due to default OpenGL coordinates (left-bottom)
         DrawTextureRec(layers[i].texture, 
-            (Rectangle){_x,_y, (float)layers[0].texture.width, (float)-layers[0].texture.height }, 
-            (Vector2){0,0}, 
+            (Rectangle){0,0, (float)layers[0].texture.width, (float)-layers[0].texture.height }, 
+            (Vector2){_x, _y}, 
             WHITE);
     }
     cPos.x = _x;

@@ -1,9 +1,9 @@
 #include"brush.h"
 
-int Brush::brushSize = 3;
+float Brush::brushSize = 3;
 Color Brush::brushColor = BLACK;
 
-void Brush::_drawToLayer(RenderTexture2D& target, Vector2& pos)
+void Brush::_drawToLayer(RenderTexture2D& target, const Vector2& pos)
 {
     static Vector2 lpos = (Vector2){-1, -1};
     static bool stillDrawing = false;
