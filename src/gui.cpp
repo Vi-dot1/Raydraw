@@ -8,14 +8,28 @@ extern "C"{
 #include"brush.h"
 #include"gui.h"
 
-void GuiWindowFloating(Rectangle &place, void (*draw)(Vector2, Vector2), Vector3 content_size, const char* title);
-
-void drawGui()
+bool drawGui()
 {
-    GuiColorPicker((Rectangle){ 5, 10, 162, 162 }, nullptr, &(Brush::brushColor));
-    GuiSlider((Rectangle){0, 192, 192, 20}, nullptr, nullptr, &(Brush::brushSize), 0, 20);
+    auto content1 = [](const Rectangle &r) {
+        GuiColorPicker((Rectangle){ 5, 10, r.width-45, 162 }, nullptr, &(Brush::brushColor));
+        GuiSlider((Rectangle){0, 192, 192, 20}, nullptr, nullptr, &(Brush::brushSize), 0, 20);
+    };
 
+    Panel panel1(content1, (Rectangle){0, 0, 200, GetScreenHeight()});
+    panel1._draw();
+
+    return panel1.IsOverPanel(GetMousePosition());
 }
+
+// GuiPanel
+void Panel::_draw()
+{
+    if(callback == nullptr) return;
+    BeginScissorMode(area.x, area.y, area.width, area.height);
+    callback(area);
+    EndScissorMode();
+};
+bool Panel::IsOverPanel(const Vector2 &point) { return CheckCollisionPointRec(point, area); }
 
 /*
 void GuiWindowFloating(Rectangle &place, void (*draw)(Vector2, Vector2), Vector2 content_size, const char* title)

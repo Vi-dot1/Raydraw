@@ -18,6 +18,7 @@ int main(void)
 	Canvas canvas(screenWidth-196, screenHeight);
 
 	Vector2 mpos;
+	bool mouseAlreadyUsed = false;
 	while(!WindowShouldClose())
 	{
 		mpos = GetMousePosition();
@@ -35,10 +36,10 @@ int main(void)
 		BeginDrawing();
         ClearBackground((Color){120, 120, 120, 255});
 
+		if(mouseAlreadyUsed == false) b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
 		canvas._draw(196, 0); // show canvas
-		b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
 
-		drawGui();
+		mouseAlreadyUsed = drawGui();
 		DrawCircleLinesV(mpos, Brush::brushSize, Brush::brushColor);
 		EndDrawing();
 	}
