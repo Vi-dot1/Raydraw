@@ -11,9 +11,11 @@ class Canvas
     RenderTexture2D layers[MAX_LAYERS];
     size_t currenLayer=0, layerAmount=1;
 
+    // Canvas position in window
     Vector2 cPos = (Vector2){0, 0};
     int width, height;
     bool changed = false;
+
 public:
     Canvas(int width, int height);
     ~Canvas();

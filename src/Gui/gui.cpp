@@ -5,8 +5,8 @@ extern "C"{
     #include"raygui.h"
 }
 
-#include"brush.h"
-#include"gui.h"
+#include"Brush/brush.hpp"
+#include"gui.hpp"
 
 bool drawGui()
 {
@@ -15,7 +15,7 @@ bool drawGui()
         GuiSlider((Rectangle){0, 192, 192, 20}, nullptr, nullptr, &(Brush::brushSize), 0, 20);
     };
 
-    Panel panel1(content1, (Rectangle){0, 0, 200, GetScreenHeight()});
+    Panel panel1(content1, (Rectangle){0, 0, 200, (float)GetScreenHeight()});
     panel1._draw();
 
     return panel1.IsOverPanel(GetMousePosition());

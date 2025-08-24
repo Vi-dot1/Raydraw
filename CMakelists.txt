@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.5)
 project(RayDraw)
 
 # Generate compile_commands.json
@@ -7,6 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Project
 add_executable(${PROJECT_NAME})
 add_subdirectory(src)
+include_directories(src)
 add_subdirectory(thirdparty)
 
 target_link_libraries(${PROJECT_NAME} raylib)

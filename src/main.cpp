@@ -2,11 +2,12 @@ extern "C"{
     #include"raylib.h"
 }
 
-#include "basicBrushes.h"
-#include "canvas.h"
-#include "gui.h"
+#include "canvas.hpp"
+#include "Brush/brush.hpp"
+#include "Gui/gui.hpp"
 
-int screenHeight = 600, screenWidth = 800;
+constexpr int screenHeight = 600, screenWidth = 800;
+constexpr Color mColor = DARKGRAY;
 
 int main(void)
 {
@@ -23,24 +24,15 @@ int main(void)
 	{
 		mpos = GetMousePosition();
 
-		// Save Canvas as png
-		if( IsKeyPressed(KEY_S) )
-		{
-			Image image = canvas._exportImage();
-            ImageFlipVertical(&image);
-            ExportImage(image, "draw.png");
-            UnloadImage(image);
-		}
-
-		// Drawing to window
 		BeginDrawing();
-        ClearBackground((Color){120, 120, 120, 255});
+        ClearBackground(GRAY);
 
+		// To avoid drawing on the canvas while clicking the controls
 		if(mouseAlreadyUsed == false) b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
-		canvas._draw(196, 0); // show canvas
-
 		mouseAlreadyUsed = drawGui();
-		DrawCircleLinesV(mpos, Brush::brushSize, Brush::brushColor);
+
+		DrawCircleLinesV(mpos, Brush::brushSize, mColor);
+		DrawCircleLinesV(mpos, 1, mColor);
 		EndDrawing();
 	}
 

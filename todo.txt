@@ -5,4 +5,4 @@
     *. Create different brushes (*)
     *. Find a way to change all this brushes seamlessly
 
-*. Create a dedicated Import/Export module for Canvases and Pngs
+*. Create a dedicated Import/Export module for Canvases to Pngs
