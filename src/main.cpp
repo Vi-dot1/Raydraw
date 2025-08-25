@@ -1,6 +1,8 @@
+#include <string>
 extern "C"{
     #include"raylib.h"
 }
+#include"raymath.h"
 
 #include "canvas.hpp"
 #include "Brush/brush.hpp"
@@ -11,12 +13,16 @@ constexpr Color mColor = DARKGRAY;
 
 int main(void)
 {
+	SetConfigFlags( FLAG_WINDOW_RESIZABLE );
 	InitWindow(screenWidth, screenHeight, "Raydraw");
 	HideCursor();
 	SetTargetFPS(120);
 
+	// Initialize Panel Size
+	Gui::updatePanel();
+
 	Brush b;
-	Canvas canvas(screenWidth-196, screenHeight);
+	Canvas canvas(screenWidth, screenHeight);
 
 	Vector2 mpos;
 	bool mouseAlreadyUsed = false;
@@ -24,15 +30,40 @@ int main(void)
 	{
 		mpos = GetMousePosition();
 
+
+		if( IsWindowResized() )
+		{
+			Gui::updatePanel();
+		}
+
+		if(  IsKeyDown(KEY_LEFT_CONTROL) )
+		{
+			if ( IsMouseButtonDown(MOUSE_BUTTON_LEFT) )
+				canvas.canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
+
+			canvas.canvasView.zoom += GetMouseWheelMove()*0.01;
+		}
+
 		BeginDrawing();
         ClearBackground(GRAY);
 
-		// To avoid drawing on the canvas while clicking the controls
-		if(mouseAlreadyUsed == false) b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
-		mouseAlreadyUsed = drawGui();
 
-		DrawCircleLinesV(mpos, Brush::brushSize, mColor);
+		canvas._draw();
+
+		// To avoid drawing on the canvas while clicking on the controls
+		//if(mouseAlreadyUsed == false) b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
+		mouseAlreadyUsed = Gui::drawGui();
+
+		DrawText(
+			("mpos: [" + std::to_string(mpos.x) + ", " + std::to_string(mpos.x) + "]").c_str(), 
+			GetScreenWidth()-180, 0, 
+			12, BLACK
+		);
+		
+		// Mouse
+		DrawCircleLinesV(mpos, Tool::size, mColor);
 		DrawCircleLinesV(mpos, 1, mColor);
+
 		EndDrawing();
 	}
 

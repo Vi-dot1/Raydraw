@@ -1,13 +1,13 @@
 #pragma once
 
+#include "tool.hpp"
 extern "C"{
     #include "raylib.h"
 }
 
-class Brush
+
+class Brush : public Tool
 {
 public:
-    static float brushSize;
-    static Color brushColor;
-    virtual void _drawToLayer(RenderTexture2D&, const Vector2&);
+    void _drawToLayer(RenderTexture2D&, const Vector2&);
 };

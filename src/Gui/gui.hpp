@@ -5,19 +5,16 @@ extern "C"{
     #include"raylib.h"
 }
 
+#include"Brush/tool.hpp"
 
-class Panel
-{
-    Rectangle area;
-    std::function<void(const Rectangle&)> callback;
+namespace Gui {
 
-public:
-    Panel(std::function<void(const Rectangle&)> func, Rectangle _area) :
-    callback(func), area(_area)
-    {};
+bool IsOverPanel(const Vector2&);
 
-    void _draw();
-    bool IsOverPanel(const Vector2&);
-};
+// Draw call point for main, returns whenever or not the mouse was used
+bool drawGui(); 
 
-bool drawGui(); // Main call point for main, returns whenever or not the mouse was used
+// Recalculates panels size when window is resized
+void updatePanel();
+
+}

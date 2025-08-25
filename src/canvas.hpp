@@ -17,6 +17,8 @@ class Canvas
     bool changed = false;
 
 public:
+    Camera2D canvasView;
+
     Canvas(int width, int height);
     ~Canvas();
 
@@ -25,7 +27,7 @@ public:
     void changeLayer(size_t);
     void addLayer();
 
-    void _draw(const float &_x, const float &_y);
+    void _draw();
     Image _exportImage();
 
     inline Vector2 localCoord(Vector2 &coord) { return {coord.x-cPos.x, coord.y-cPos.y}; };

@@ -5,32 +5,52 @@ extern "C"{
     #include"raygui.h"
 }
 
-#include"Brush/brush.hpp"
+#include"Brush/tool.hpp"
 #include"gui.hpp"
+
+
+// How much of the screen does the panel occupies
+static float panelWidthScale = 0.2; 
+
+static Rectangle panelArea;
+float panelHMarging = 6;
+float fontHeight = 18;
+
+namespace Gui
+{
 
 bool drawGui()
 {
-    auto content1 = [](const Rectangle &r) {
-        GuiColorPicker((Rectangle){ 5, 10, r.width-45, 162 }, nullptr, &(Brush::brushColor));
-        GuiSlider((Rectangle){0, 192, 192, 20}, nullptr, nullptr, &(Brush::brushSize), 0, 20);
-    };
+    GuiColorPicker(
+        (Rectangle)
+            { panelArea.x, panelArea.y, panelArea.width, panelArea.width }, 
 
-    Panel panel1(content1, (Rectangle){0, 0, 200, (float)GetScreenHeight()});
-    panel1._draw();
+        nullptr, &(Tool::color)
+    );
 
-    return panel1.IsOverPanel(GetMousePosition());
+    GuiSlider(
+        (Rectangle)
+            { panelArea.x, panelArea.width+fontHeight, panelArea.width, fontHeight}, 
+
+        nullptr, nullptr, &(Tool::size), 
+        0, 20
+    );
+
+    return false;
 }
 
-// GuiPanel
-void Panel::_draw()
+void updatePanel()
 {
-    if(callback == nullptr) return;
-    BeginScissorMode(area.x, area.y, area.width, area.height);
-    callback(area);
-    EndScissorMode();
-};
-bool Panel::IsOverPanel(const Vector2 &point) { return CheckCollisionPointRec(point, area); }
+    // For the moments, the panel is eternally
+    // attached to the top left
+    panelArea.x = panelHMarging;
+    panelArea.y = 10;
 
+    panelArea.height = GetScreenHeight();
+    panelArea.width = ( GetScreenWidth()*panelWidthScale ) - panelHMarging*2;
+}
+
+}
 /*
 void GuiWindowFloating(Rectangle &place, void (*draw)(Vector2, Vector2), Vector2 content_size, const char* title)
 {

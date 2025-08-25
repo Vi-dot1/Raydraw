@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 4.0)
 project(RayDraw)
 
-# Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+set(CMAKE_CXX_STANDART 23)
+set(CMAKE_CXX_STANDART_REQUIRED)
 
 # Project
 add_executable(${PROJECT_NAME})
@@ -10,8 +12,11 @@ add_subdirectory(src)
 include_directories(src)
 add_subdirectory(thirdparty)
 
+# Libraries
 target_link_libraries(${PROJECT_NAME} raylib)
 target_link_libraries(${PROJECT_NAME} raygui)
+
+# And down here some stuff I copied from a cmake example
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
