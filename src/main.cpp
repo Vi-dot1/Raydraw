@@ -11,7 +11,7 @@ extern "C"{
 constexpr int screenHeight = 600, screenWidth = 800;
 constexpr Color mColor = DARKGRAY;
 
-int main(void)
+int main(int argc, char** argv)
 {
 	SetConfigFlags( FLAG_WINDOW_RESIZABLE );
 	InitWindow(screenWidth, screenHeight, "Raydraw");
@@ -51,8 +51,8 @@ int main(void)
 		canvas._draw();
 
 		// To avoid drawing on the canvas while clicking on the controls
-		//if(mouseAlreadyUsed == false) b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
 		mouseAlreadyUsed = Gui::drawGui();
+		if(mouseAlreadyUsed == false) b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
 
 		DrawText(
 			("mpos: [" + std::to_string(mpos.x) + ", " + std::to_string(mpos.x) + "]").c_str(), 
