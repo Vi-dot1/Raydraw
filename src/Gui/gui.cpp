@@ -9,45 +9,84 @@ extern "C"{
 #include"gui.hpp"
 
 
-// How much of the screen does the panel occupies
-static float panelWidthScale = 0.2; 
+// Proportion of the screen the panel occupies horizontally
+static float panelWidthScale = 0.20; 
 
 static Rectangle panelArea;
 float panelHMarging = 6;
+float panelVMarging = 4;
 float fontHeight = 18;
 
 namespace Gui
 {
 
-bool drawGui()
+
+bool drawGui(const Vector2 &mpos)
 {
-    GuiColorPicker(
-        (Rectangle)
-            { panelArea.x, panelArea.y, panelArea.width, panelArea.width }, 
+    bool isMouseOnScreen = false;
 
-        nullptr, &(Tool::color)
+    // If there's squares, this should be their dimensions
+    float panelSquareSize = panelArea.width-panelHMarging*2;
+
+    // Witdth and height of all sliders
+    Vector2 panelSlider = {panelArea.width-panelHMarging*2, fontHeight };
+
+    Color panelColor = (Color){112, 132, 122, 122};
+    DrawRectanglePro(
+        panelArea, 
+        (Vector2){0,0}, 
+        0.0, 
+        panelColor
     );
+    
+    {
+        // Raygui's color picker also draws a hue bar on the side out of the given rect,
+        // So in order to make it fit on the panel I had to reduce its dimensions
+        float colorPickerSize = panelSquareSize-fontHeight-panelHMarging;
+        GuiColorPicker(
+            (Rectangle)
+            {
+                panelHMarging, panelVMarging,
+                colorPickerSize,
+                colorPickerSize 
+            },
+            nullptr, 
+            &(Tool::color)
+        );
 
-    GuiSlider(
-        (Rectangle)
-            { panelArea.x, panelArea.width+fontHeight, panelArea.width, fontHeight}, 
+        // Brush Size, also havin some weird positioning due to the color picker...
+        GuiSlider(
+            (Rectangle)
+                {
+                    panelHMarging, panelSquareSize, 
+                    panelSlider.x, panelSlider.y
+                }, 
 
-        nullptr, nullptr, &(Tool::size), 
-        0, 20
-    );
+            nullptr, nullptr, &(Tool::size), 
+            1, 20
+        );
+    }
 
-    return false;
+    // For the moments is an or, I'll maybe draw another panel on the right for layers
+    isMouseOnScreen |= CheckCollisionPointRec(mpos, panelArea);
+
+    return isMouseOnScreen;
 }
 
 void updatePanel()
 {
     // For the moments, the panel is eternally
     // attached to the top left
-    panelArea.x = panelHMarging;
-    panelArea.y = 10;
+    panelArea.x = 0;
+    panelArea.y = 0;
 
     panelArea.height = GetScreenHeight();
     panelArea.width = ( GetScreenWidth()*panelWidthScale ) - panelHMarging*2;
+}
+
+bool isInPanel(const Vector2 &pos)
+{
+    return CheckCollisionPointRec(pos, panelArea);
 }
 
 }

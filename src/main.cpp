@@ -25,9 +25,9 @@ int main(int argc, char** argv)
 	Canvas canvas(screenWidth, screenHeight);
 
 	Vector2 mpos;
-	bool mouseAlreadyUsed = false;
 	while(!WindowShouldClose())
 	{
+		bool mouseAlreadyUsed = false;
 		mpos = GetMousePosition();
 
 
@@ -42,6 +42,9 @@ int main(int argc, char** argv)
 				canvas.canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
 
 			canvas.canvasView.zoom += GetMouseWheelMove()*0.01;
+
+			// TO avoid drawing while dragging the screen
+			mouseAlreadyUsed = true;
 		}
 
 		BeginDrawing();
@@ -51,7 +54,8 @@ int main(int argc, char** argv)
 		canvas._draw();
 
 		// To avoid drawing on the canvas while clicking on the controls
-		mouseAlreadyUsed = Gui::drawGui();
+		mouseAlreadyUsed |= Gui::drawGui(mpos);
+
 		if(mouseAlreadyUsed == false) b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
 
 		DrawText(
@@ -61,7 +65,7 @@ int main(int argc, char** argv)
 		);
 		
 		// Mouse
-		DrawCircleLinesV(mpos, Tool::size, mColor);
+		DrawCircleLinesV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
 		DrawCircleLinesV(mpos, 1, mColor);
 
 		EndDrawing();
