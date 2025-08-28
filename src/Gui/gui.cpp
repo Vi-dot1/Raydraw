@@ -10,26 +10,50 @@ extern "C"{
 
 
 // Proportion of the screen the panel occupies horizontally
-static float panelWidthScale = 0.20; 
+static float panelWidthScale = 0.22; 
 
 static Rectangle panelArea;
 float panelHMarging = 6;
 float panelVMarging = 4;
 float fontHeight = 18;
 
+// If there's squares, this should be their dimensions
+float panelSquareSize = panelArea.width-panelHMarging*2;
+
+// Witdth and height of all sliders
+Vector2 panelSlider = {panelArea.width-panelHMarging*2, fontHeight };
+
 namespace Gui
 {
+
+const int MAX_COLORS = 16;
+const int COLOR_PER_ROW = sqrt(MAX_COLORS);
+float colorBoxSize = (panelSquareSize)/COLOR_PER_ROW;
+static Color SavedColors[MAX_COLORS] =  {
+    PINK,
+    RED,
+    BLUE,
+    SKYBLUE,
+    YELLOW,
+    GOLD,
+    ORANGE,
+    DARKGREEN,
+    GREEN,
+    LIME,
+    MAGENTA,
+    PURPLE,
+    BEIGE,
+    BROWN,
+    DARKBROWN,
+    BLACK,
+};
+int currentColor = 0;
 
 
 bool drawGui(const Vector2 &mpos)
 {
     bool isMouseOnScreen = false;
 
-    // If there's squares, this should be their dimensions
-    float panelSquareSize = panelArea.width-panelHMarging*2;
-
-    // Witdth and height of all sliders
-    Vector2 panelSlider = {panelArea.width-panelHMarging*2, fontHeight };
 
     Color panelColor = (Color){112, 132, 122, 122};
     DrawRectanglePro(
@@ -54,17 +78,68 @@ bool drawGui(const Vector2 &mpos)
             &(Tool::color)
         );
 
+        SavedColors[currentColor] = Tool::color;
+
+        GuiLabel(
+            (Rectangle)
+            {
+                panelHMarging,
+                panelSquareSize,
+                panelSlider.x, panelSlider.y
+            }, 
+            "Colors"
+        );
         // Brush Size, also havin some weird positioning due to the color picker...
         GuiSlider(
             (Rectangle)
                 {
-                    panelHMarging, panelSquareSize, 
+                    panelHMarging, panelSquareSize-panelVMarging, 
                     panelSlider.x, panelSlider.y
                 }, 
 
             nullptr, nullptr, &(Tool::size), 
             1, 20
         );
+
+        // Individual color boxes
+        const Vector2 colorBoxPos = {panelHMarging, panelSquareSize+fontHeight};
+
+        for(int i=0, color_idx=0; i<panelSquareSize-1 && color_idx<MAX_COLORS; i+=colorBoxSize)
+        {
+            for(int j=0; j<panelSquareSize; j+=colorBoxSize)
+            {
+
+                Rectangle colorBox = (Rectangle)
+                {
+                    colorBoxPos.x+j, colorBoxPos.y+i, 
+                    colorBoxSize, colorBoxSize
+                };
+
+                // The only way I found to show the color in the button is to draw a rectangle on top of it
+                // with the way raygui works means I must draw a button, then the rectangle with the color on top
+                // that means there's overdraw, there may be ways to optimize this
+                bool picked = currentColor == color_idx;
+                picked |= GuiButton
+                (
+                    colorBox,
+                    nullptr
+                );
+                DrawRectangleRec(
+                    colorBox,
+                    SavedColors[color_idx]
+                );
+
+                if( picked ) 
+                {
+                    DrawRectangleLinesEx(colorBox, 2, RAYWHITE);
+                    currentColor = color_idx;
+                }
+                ++color_idx;
+            }
+        }
+        Tool::color = SavedColors[currentColor];
+        
+
     }
 
     // For the moments is an or, I'll maybe draw another panel on the right for layers
@@ -81,7 +156,15 @@ void updatePanel()
     panelArea.y = 0;
 
     panelArea.height = GetScreenHeight();
-    panelArea.width = ( GetScreenWidth()*panelWidthScale ) - panelHMarging*2;
+    panelArea.width = ( GetScreenWidth()*panelWidthScale );
+
+    // If there's squares, this should be their dimensions
+    panelSquareSize = panelArea.width-panelHMarging*2;
+
+    colorBoxSize = (panelSquareSize)/COLOR_PER_ROW;
+
+    // Witdth and height of all sliders
+    panelSlider = {panelArea.width-panelHMarging*2, fontHeight };
 }
 
 bool isInPanel(const Vector2 &pos)

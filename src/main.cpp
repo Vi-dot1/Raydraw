@@ -11,6 +11,9 @@ extern "C"{
 constexpr int screenHeight = 600, screenWidth = 800;
 constexpr Color mColor = DARKGRAY;
 
+enum class mStates { draw, hold, normal };
+mStates mState = mStates::draw;
+
 int main(int argc, char** argv)
 {
 	SetConfigFlags( FLAG_WINDOW_RESIZABLE );
@@ -41,10 +44,16 @@ int main(int argc, char** argv)
 			if ( IsMouseButtonDown(MOUSE_BUTTON_LEFT) )
 				canvas.canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
 
-			canvas.canvasView.zoom += GetMouseWheelMove()*0.01;
+			canvas.canvasView.zoom += GetMouseWheelMove()*0.05;
 
 			// TO avoid drawing while dragging the screen
 			mouseAlreadyUsed = true;
+
+			mState = mStates::hold;
+		}
+		else
+		{
+			mState = mStates::draw;
 		}
 
 		BeginDrawing();
@@ -65,8 +74,20 @@ int main(int argc, char** argv)
 		);
 		
 		// Mouse
-		DrawCircleLinesV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
-		DrawCircleLinesV(mpos, 1, mColor);
+		switch(mState)
+		{
+			case mStates::draw:
+			DrawCircleLinesV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
+			DrawCircleLinesV(mpos, 1, mColor);
+			break;
+
+			case mStates::hold:
+			DrawCircleV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
+			break;
+
+			default:
+			break;
+		};
 
 		EndDrawing();
 	}
