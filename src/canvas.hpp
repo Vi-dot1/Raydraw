@@ -30,7 +30,7 @@ public:
     void _draw();
     Image _exportImage();
 
-    inline Vector2 localCoord(Vector2 &coord) 
+    inline Vector2 localCoord(const Vector2 &coord) 
     { 
         // This function gets the Camera MAtrix and multiplies coord by it
         return GetScreenToWorld2D(coord, canvasView);

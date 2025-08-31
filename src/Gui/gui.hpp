@@ -1,11 +1,10 @@
 #pragma once
 
-#include<functional>
 extern "C"{
     #include"raylib.h"
 }
 
-#include"Brush/tool.hpp"
+#include"Tools/tool.hpp"
 
 namespace Gui {
 

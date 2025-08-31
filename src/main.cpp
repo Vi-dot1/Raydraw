@@ -1,3 +1,4 @@
+#include "Tools/LineTool.hpp"
 #include <string>
 extern "C"{
     #include"raylib.h"
@@ -5,14 +6,14 @@ extern "C"{
 #include"raymath.h"
 
 #include "canvas.hpp"
-#include "Brush/brush.hpp"
+#include "Tools/brush.hpp"
 #include "Gui/gui.hpp"
+
+#include"mState.hpp"
 
 constexpr int screenHeight = 600, screenWidth = 800;
 constexpr Color mColor = DARKGRAY;
 
-enum class mStates { draw, hold, normal };
-mStates mState = mStates::draw;
 
 int main(int argc, char** argv)
 {
@@ -24,7 +25,7 @@ int main(int argc, char** argv)
 	// Initialize Panel Size
 	Gui::updatePanel();
 
-	Brush b;
+	LineTool b;
 	Canvas canvas(screenWidth, screenHeight);
 
 	Vector2 mpos;
@@ -32,6 +33,7 @@ int main(int argc, char** argv)
 	{
 		bool mouseAlreadyUsed = false;
 		mpos = GetMousePosition();
+		Mouse::setPos( GetMousePosition() );
 
 
 		if( IsWindowResized() )
@@ -49,32 +51,28 @@ int main(int argc, char** argv)
 			// TO avoid drawing while dragging the screen
 			mouseAlreadyUsed = true;
 
-			mState = mStates::hold;
+			Mouse::setState(mStates::hold);
 		}
 		else
 		{
-			mState = mStates::draw;
+			Mouse::setState(mStates::draw);
 		}
 
 		BeginDrawing();
         ClearBackground(GRAY);
 
 
+		// Show canvas on the screen
 		canvas._draw();
 
 		// To avoid drawing on the canvas while clicking on the controls
 		mouseAlreadyUsed |= Gui::drawGui(mpos);
 
-		if(mouseAlreadyUsed == false) b._drawToLayer(canvas.getCurrentLayer(), canvas.localCoord(mpos));
+		if(mouseAlreadyUsed == false) b._drawTo(canvas);
 
-		DrawText(
-			("mpos: [" + std::to_string(mpos.x) + ", " + std::to_string(mpos.x) + "]").c_str(), 
-			GetScreenWidth()-180, 0, 
-			12, BLACK
-		);
 		
-		// Mouse
-		switch(mState)
+		// What the mouse looks like in each state
+		switch( Mouse::getState() )
 		{
 			case mStates::draw:
 			DrawCircleLinesV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
