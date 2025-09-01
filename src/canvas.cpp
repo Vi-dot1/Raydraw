@@ -24,7 +24,6 @@ Canvas::Canvas(int _width, int _height)
     EndTextureMode();
 }
 
-// Canvas will only give out the image, saving it as a file is not its responsability
 Image Canvas::_exportImage()
 {
     RenderTexture2D r = LoadRenderTexture(layers[0].texture.width, layers[0].texture.height);

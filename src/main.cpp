@@ -32,7 +32,6 @@ int main(int argc, char** argv)
 	Vector2 mpos;
 	while(!WindowShouldClose())
 	{
-		bool mouseAlreadyUsed = false;
 		Mouse::updateState();
 
 		mpos = Mouse::getPos();
@@ -51,7 +50,7 @@ int main(int argc, char** argv)
 			canvas.canvasView.zoom += GetMouseWheelMove()*0.05;
 
 			// TO avoid drawing while dragging the screen
-			mouseAlreadyUsed = true;
+			Mouse::markUsed();
 
 			Mouse::setProgramState(Mouse::ProgramState::hold);
 		}
@@ -65,12 +64,13 @@ int main(int argc, char** argv)
 
 
 		// Show canvas on the screen
+		// Drawing is up to the brush
 		canvas._draw();
 
-		// To avoid drawing on the canvas while clicking on the controls
-		mouseAlreadyUsed |= Gui::drawGui(mpos);
 
-		if(mouseAlreadyUsed == false) b._drawTo(canvas);
+		Gui::drawGui1();
+
+		if( !Mouse::wasAlreadyUsed() ) b._drawTo(canvas);
 
 		
 		// What the mouse looks like in each state

@@ -4,14 +4,14 @@ extern "C"{
     #include"raylib.h"
 }
 
-#include"Tools/tool.hpp"
 
 namespace Gui {
 
+// Used to check whenever a point is inside the main panel area
 bool IsOverPanel(const Vector2&);
 
-// Draw call point for main, returns whenever or not the mouse was used
-bool drawGui(const Vector2 &mpos); 
+// Draw/process call for the main panel
+void drawGui1(); 
 
 // Recalculates panels size when window is resized
 void updatePanel();

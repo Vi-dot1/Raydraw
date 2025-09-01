@@ -5,7 +5,7 @@
 namespace Mouse
 {
 
-//
+// vvv This is the object the state of the mouse is written into (Am I writing too many comments?)
 static State mouseState;
 
 const State& getMouseState()
@@ -33,11 +33,21 @@ void setProgramState(ProgramState&& state)
     mouseState.state = state;
 }
 
-// I'll maybe use them later?
+void markUsed()
+{
+    mouseState.inputConsumed = true;
+}
+bool wasAlreadyUsed()
+{
+    return mouseState.inputConsumed;
+}
+
 const Vector2& getPos()
 {
     return mouseState.pos;
 }
+
+// I'll maybe use them later?
 void setPos(const Vector2& pos)
 {
     mouseState.pos = pos;

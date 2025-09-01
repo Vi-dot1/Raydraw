@@ -5,6 +5,7 @@ extern "C"{
     #include"raygui.h"
 }
 
+#include"mState.hpp"
 #include"gui.hpp"
 
 
@@ -49,11 +50,8 @@ static Color SavedColors[MAX_COLORS] =  {
 int currentColor = 0;
 
 
-bool drawGui(const Vector2 &mpos)
+void drawGui1()
 {
-    bool isMouseOnScreen = false;
-
-
     Color panelColor = (Color){112, 132, 122, 122};
     DrawRectanglePro(
         panelArea, 
@@ -141,10 +139,7 @@ bool drawGui(const Vector2 &mpos)
 
     }
 
-    // For the moments is an or, I'll maybe draw another panel on the right for layers
-    isMouseOnScreen |= CheckCollisionPointRec(mpos, panelArea);
-
-    return isMouseOnScreen;
+    if( CheckCollisionPointRec(Mouse::getPos(), panelArea) ) Mouse::markUsed();
 }
 
 void updatePanel()

@@ -27,7 +27,7 @@ struct State
 /*
 Returns a constant reference to the used `Mouse::State` object containing relevant mouse data.
 
-Modifying the state of the mouse must be done using the provided set functions.
+Modifying the state of the mouse must be done using the provided functions.
 */
 const State& getMouseState();
 
@@ -43,4 +43,13 @@ const ProgramState& getProgramState();
 void setProgramState(ProgramState&& state);
 
 const Vector2& getPos();
+
+/*
+Updates the `inputConsumed` field on the `Mouse::State` object, 
+used to tell any other component processed after that it cannot use the mouse.
+*/
+void markUsed();
+
+
+bool wasAlreadyUsed();
 }
