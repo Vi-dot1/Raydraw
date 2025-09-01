@@ -5,8 +5,10 @@
 
 void Brush::_drawTo(Canvas& canvas)
 {
+    const Mouse::State& mState = Mouse::getMouseState();
+
     RenderTexture2D& target = canvas.getCurrentLayer();
-    Vector2 pos = canvas.localCoord(Mouse::getPos());
+    Vector2 pos = canvas.localCoord(mState.pos);
 
 	BeginTextureMode(target);
 

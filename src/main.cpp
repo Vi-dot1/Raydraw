@@ -1,4 +1,5 @@
 #include "Tools/LineTool.hpp"
+#include <iostream>
 #include <string>
 extern "C"{
     #include"raylib.h"
@@ -32,8 +33,9 @@ int main(int argc, char** argv)
 	while(!WindowShouldClose())
 	{
 		bool mouseAlreadyUsed = false;
-		mpos = GetMousePosition();
-		Mouse::setPos( GetMousePosition() );
+		Mouse::updateState();
+
+		mpos = Mouse::getPos();
 
 
 		if( IsWindowResized() )
@@ -51,11 +53,11 @@ int main(int argc, char** argv)
 			// TO avoid drawing while dragging the screen
 			mouseAlreadyUsed = true;
 
-			Mouse::setState(mStates::hold);
+			Mouse::setProgramState(Mouse::ProgramState::hold);
 		}
 		else
 		{
-			Mouse::setState(mStates::draw);
+			Mouse::setProgramState(Mouse::ProgramState::draw);
 		}
 
 		BeginDrawing();
@@ -72,18 +74,19 @@ int main(int argc, char** argv)
 
 		
 		// What the mouse looks like in each state
-		switch( Mouse::getState() )
+		switch( Mouse::getProgramState() )
 		{
-			case mStates::draw:
+			case Mouse::ProgramState::draw:
 			DrawCircleLinesV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
 			DrawCircleLinesV(mpos, 1, mColor);
 			break;
 
-			case mStates::hold:
+			case Mouse::ProgramState::hold:
 			DrawCircleV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
 			break;
 
 			default:
+			DrawCircleV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
 			break;
 		};
 

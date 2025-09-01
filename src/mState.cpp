@@ -1,51 +1,43 @@
 #include"raylib.h"
 #include"mState.hpp"
 
-static struct State
-{
-    mStates state = mStates::draw;
-
-    Vector2 pos;
-    bool hold = false;
-    bool inputConsumed = false;
-}
-mouseState;
 
 namespace Mouse
 {
 
-/*
-Fetches and saves mouse position along with current input state 
-and an enum representing the current program state of the mouse.
+//
+static State mouseState;
 
-Must be called on the main at the start of each frame.
-*/
-void updateState()
+const State& getMouseState()
 {
-
-    mouseState.pos = GetMousePosition();
-
-    // To check if consumed the input
-    mouseState.inputConsumed = mouseState.hold;
-
-    mouseState.hold = IsMouseButtonDown(MOUSE_LEFT_BUTTON);
+    return mouseState;
 }
 
-const mStates& getState()
+void updateState()
+{
+    mouseState.pos = GetMousePosition();
+
+    mouseState.wasHolding = mouseState.IsHolding;
+    mouseState.IsHolding = IsMouseButtonDown(MOUSE_LEFT_BUTTON);
+
+    // To check if we consumed an input click, we check if we complete
+    mouseState.inputConsumed = mouseState.wasHolding && !mouseState.IsHolding;
+}
+
+const ProgramState& getProgramState()
 {
     return mouseState.state;
 }
-
-void setState(mStates&& state)
+void setProgramState(ProgramState&& state)
 {
     mouseState.state = state;
 }
 
+// I'll maybe use them later?
 const Vector2& getPos()
 {
     return mouseState.pos;
 }
-
 void setPos(const Vector2& pos)
 {
     mouseState.pos = pos;

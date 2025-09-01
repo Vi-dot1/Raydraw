@@ -6,8 +6,10 @@
 
 void LineTool::_drawTo(Canvas& canvas)
 {
+    const Mouse::State& mState = Mouse::getMouseState();
+
     RenderTexture2D& target = canvas.getCurrentLayer();
-    const Vector2& canvasPos = canvas.localCoord(Mouse::getPos());
+    const Vector2& canvasPos = canvas.localCoord(mState.pos);
 
     static bool mHold = false;
 
@@ -18,7 +20,7 @@ void LineTool::_drawTo(Canvas& canvas)
     {
         mHold = true;
         lastCanvasPos = canvasPos;
-        lastPos = Mouse::getPos();
+        lastPos = mState.pos;
 
         DrawCircle(canvasPos.x, canvasPos.y, Tool::size, Tool::color);
     }
@@ -33,5 +35,5 @@ void LineTool::_drawTo(Canvas& canvas)
     EndTextureMode();
 
 
-    if(mHold) DrawLineEx(Mouse::getPos(), lastPos, Tool::size*2*canvas.canvasView.zoom, Tool::color);
+    if(mHold) DrawLineEx(mState.pos, lastPos, Tool::size*2*canvas.canvasView.zoom, Tool::color);
 }
