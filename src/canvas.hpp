@@ -1,10 +1,31 @@
 #pragma once
 
 #include<cstddef>
+#include <memory>
+#include <vector>
+
 extern "C"{
     #include "raylib.h"
 }
 #define MAX_LAYERS 80
+
+/*
+Struct used to compact `Canvas` data to be saved
+*/
+struct CanvasData
+{
+    int width;
+    int height;
+    Camera2D canvasView;
+
+
+    size_t layerAmount;
+    std::vector<int> bytesPerlayer;
+
+    // All the layers are packed into a byte array
+    // which will be read to get each layer back
+    std::unique_ptr<unsigned char[]> data;
+};
 
 /* 
 Used to create and represent canvas objects.
@@ -27,6 +48,7 @@ public:
     Camera2D canvasView;
 
     Canvas(int width, int height);
+    Canvas(CanvasData& c);
     ~Canvas();
 
     // Returns `RenderTexture2D` of the currently selected layer
@@ -38,12 +60,20 @@ public:
     void _draw();
 
     /*
-    Returns an `Image` by overlapping all the layers top to bottom
-
+    Returns an `Image` of the canvas by overlapping all the layers top to bottom
     The canvas will only give out the image, saving it as a file is not its responsability
     */
     Image _exportImage();
 
+    /*
+    Returns all the relevant data as a `CanvasData` object
+    */
+    void _getData(CanvasData &c);
+
+    /*
+    Turns Screen coordinates to canvas coordinates, 
+    mostly used to get the coordinates where something should to be drawn
+    */
     inline Vector2 localCoord(const Vector2 &coord) 
     { 
         // This raylib function gets the Camera Matrix and multiplies coord by it

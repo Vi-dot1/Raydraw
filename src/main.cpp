@@ -26,6 +26,14 @@ int main(int argc, char** argv)
 	// Initialize Panel Size
 	Gui::updatePanel();
 
+	// Background is literally just an Image generated using raylibs default gen algorithms
+	Texture2D editorBackground = LoadTextureFromImage(
+		GenImageChecked(
+			GetScreenWidth(), GetScreenWidth(), 
+			6, 6, GRAY, DARKGRAY
+		)
+	);
+
 	LineTool b;
 	Canvas canvas(screenWidth, screenHeight);
 
@@ -40,6 +48,12 @@ int main(int argc, char** argv)
 		if( IsWindowResized() )
 		{
 			Gui::updatePanel();
+			editorBackground = LoadTextureFromImage(
+				GenImageChecked(
+					GetScreenWidth(), GetScreenWidth(), 
+					6, 6, GRAY, DARKGRAY
+				)
+			);
 		}
 
 		if(  IsKeyDown(KEY_LEFT_CONTROL) )
@@ -60,7 +74,8 @@ int main(int argc, char** argv)
 		}
 
 		BeginDrawing();
-        ClearBackground(GRAY);
+		DrawTexture(editorBackground, 0, 0, RAYWHITE);
+        //ClearBackground(GRAY);
 
 
 		// Show canvas on the screen
@@ -94,5 +109,10 @@ int main(int argc, char** argv)
 	}
 
 	CloseWindow();
+	UnloadTexture(editorBackground);
+
+	CanvasData c;
+	canvas._getData(c);
+
 	return 0;
 }
