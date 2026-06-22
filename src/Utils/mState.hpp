@@ -6,16 +6,16 @@
 namespace Mouse
 {
 
-enum class ProgramState { draw, hold, normal };
+enum class State { draw, hold, normal };
 
 /*
 Struct used to hold mouses state, not intended to be created directly.
 
 A reference to the current mouse state can be obtained using the `getMouseState()` function.
 */
-struct State
+struct mState
 {
-    ProgramState state = ProgramState::draw;
+    State state = State::draw;
 
     Vector2 pos;
     bool inputConsumed = false;
@@ -29,7 +29,7 @@ Returns a constant reference to the used `Mouse::State` object containing releva
 
 Modifying the state of the mouse must be done using the provided functions.
 */
-const State& getMouseState();
+const mState& getMouseState();
 
 /*
 Fetches and saves current mouse position along with the current input state,
@@ -39,8 +39,8 @@ Must be called on the main at the start of each frame.
 */
 void updateState();
 
-const ProgramState& getProgramState();
-void setProgramState(ProgramState&& state);
+const State& getState();
+void setState(State&& state);
 
 const Vector2& getPos();
 

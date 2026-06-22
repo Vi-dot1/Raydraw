@@ -71,7 +71,7 @@ void Canvas::_getData(CanvasData &c)
 
     c.bytesPerlayer = std::vector<int>(layerAmount);
 
-    int ImageByteSize = GetPixelDataSize(width, height, layers[currenLayer].texture.format);
+    int ImageByteSize = GetPixelDataSize(width, height, layers[currenLayerIdx].texture.format);
 
     // Make space in the data buffer for the image data
     c.data.reset(new unsigned char[ImageByteSize*layerAmount]);
@@ -120,7 +120,7 @@ Canvas::~Canvas()
 
 RenderTexture2D& Canvas::getCurrentLayer()
 {
-    return layers[currenLayer];
+    return layers[currenLayerIdx];
 }
 
 

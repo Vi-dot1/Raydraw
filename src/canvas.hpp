@@ -37,13 +37,13 @@ Features:
 class Canvas
 {
     RenderTexture2D layers[MAX_LAYERS];
-    size_t currenLayer=0, layerAmount=1;
+    size_t currenLayerIdx=0, layerAmount=1;
 
     // Canvas position in window
     Vector2 cPos = (Vector2){0, 0};
     int width, height;
     bool changed = false;
-
+    
 public:
     Camera2D canvasView;
 
@@ -60,23 +60,21 @@ public:
     void _draw();
 
     /*
-    Returns an `Image` of the canvas by overlapping all the layers top to bottom
-    The canvas will only give out the image, saving it as a file is not its responsability
+        Returns an `Image` of the canvas by overlapping all the layers top to bottom
+        The canvas will only give out the image, saving it as a file is not its responsability
     */
     Image _exportImage();
 
-    /*
-    Returns all the relevant data as a `CanvasData` object
-    */
+    // Returns all the relevant data as a `CanvasData` object
     void _getData(CanvasData &c);
 
     /*
-    Turns Screen coordinates to canvas coordinates, 
-    mostly used to get the coordinates where something should to be drawn
+        Turns Screen coordinates to Canvas coordinates, 
+        used to get the coordinates where we should draw
     */
     inline Vector2 localCoord(const Vector2 &coord) 
     { 
-        // This raylib function gets the Camera Matrix and multiplies coord by it
+        // Gets the Camera Matrix and multiplies coord by it
         return GetScreenToWorld2D(coord, canvasView);
     };
 };

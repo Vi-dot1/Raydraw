@@ -7,14 +7,11 @@ extern "C"{
 #include"raymath.h"
 
 #include "canvas.hpp"
-#include "Tools/brush.hpp"
 #include "Gui/gui.hpp"
 
-#include"mState.hpp"
+#include"Utils/mState.hpp"
 
 constexpr int screenHeight = 600, screenWidth = 800;
-constexpr Color mColor = DARKGRAY;
-
 
 int main(int argc, char** argv)
 {
@@ -41,9 +38,7 @@ int main(int argc, char** argv)
 	while(!WindowShouldClose())
 	{
 		Mouse::updateState();
-
 		mpos = Mouse::getPos();
-
 
 		if( IsWindowResized() )
 		{
@@ -65,45 +60,21 @@ int main(int argc, char** argv)
 
 			// TO avoid drawing while dragging the screen
 			Mouse::markUsed();
-
-			Mouse::setProgramState(Mouse::ProgramState::hold);
+			Mouse::setState(Mouse::State::hold);
 		}
 		else
 		{
-			Mouse::setProgramState(Mouse::ProgramState::draw);
+			Mouse::setState(Mouse::State::draw);
 		}
 
+        
+        // Redering
 		BeginDrawing();
+
 		DrawTexture(editorBackground, 0, 0, RAYWHITE);
-        //ClearBackground(GRAY);
-
-
-		// Show canvas on the screen
-		// Drawing is up to the brush
 		canvas._draw();
-
-
-		Gui::drawGui1();
-
+		Gui::drawGui();
 		if( !Mouse::wasAlreadyUsed() ) b._drawTo(canvas);
-
-		
-		// What the mouse looks like in each state
-		switch( Mouse::getProgramState() )
-		{
-			case Mouse::ProgramState::draw:
-			DrawCircleLinesV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
-			DrawCircleLinesV(mpos, 1, mColor);
-			break;
-
-			case Mouse::ProgramState::hold:
-			DrawCircleV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
-			break;
-
-			default:
-			DrawCircleV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
-			break;
-		};
 
 		EndDrawing();
 	}
@@ -113,6 +84,5 @@ int main(int argc, char** argv)
 
 	CanvasData c;
 	canvas._getData(c);
-
 	return 0;
 }

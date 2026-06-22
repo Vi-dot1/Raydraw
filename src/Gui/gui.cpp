@@ -5,7 +5,7 @@ extern "C"{
     #include"raygui.h"
 }
 
-#include"mState.hpp"
+#include"Utils/mState.hpp"
 #include"Tools/tool.hpp"
 #include"gui.hpp"
 
@@ -51,7 +51,8 @@ static Color SavedColors[MAX_COLORS] =  {
 int currentColor = 0;
 
 
-void drawGui1()
+constexpr Color mColor = DARKGRAY;
+void drawGui()
 {
     Color panelColor = (Color){112, 132, 122, 122};
     DrawRectanglePro(
@@ -60,6 +61,24 @@ void drawGui1()
         0.0, 
         panelColor
     );
+
+    Vector2 mpos = Mouse::getPos();
+    // What the mouse looks like in each state
+    switch( Mouse::getState() )
+    {
+        case Mouse::State::draw:
+        DrawCircleLinesV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
+        DrawCircleLinesV(mpos, 1, mColor);
+        break;
+
+        case Mouse::State::hold:
+        DrawCircleV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
+        break;
+
+        default:
+        DrawCircleV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
+        break;
+    };
     
     {
         // Raygui's color picker also draws a hue bar on the side out of the given rect,

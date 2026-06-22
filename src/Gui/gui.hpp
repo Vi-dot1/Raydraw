@@ -11,7 +11,7 @@ namespace Gui {
 bool IsOverPanel(const Vector2&);
 
 // Draw/process call for the main panel
-void drawGui1(); 
+void drawGui(); 
 
 // Recalculates panels size when window is resized
 void updatePanel();

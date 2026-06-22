@@ -1,14 +1,14 @@
 #include"raylib.h"
-#include"mState.hpp"
+#include"Utils/mState.hpp"
 
 
 namespace Mouse
 {
 
 // vvv This is the object the state of the mouse is written into (Am I writing too many comments?)
-static State mouseState;
+static mState mouseState;
 
-const State& getMouseState()
+const mState& getMouseState()
 {
     return mouseState;
 }
@@ -24,11 +24,11 @@ void updateState()
     mouseState.inputConsumed = mouseState.wasHolding && !mouseState.IsHolding;
 }
 
-const ProgramState& getProgramState()
+const State& getState()
 {
     return mouseState.state;
 }
-void setProgramState(ProgramState&& state)
+void setState(State&& state)
 {
     mouseState.state = state;
 }
