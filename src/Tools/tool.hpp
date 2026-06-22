@@ -15,5 +15,5 @@ public:
     inline static Color color = BLACK;
 
     // Thus the name
-    virtual void _drawTo(Canvas&);
+    virtual void _drawTo(Canvas&) = 0;
 };

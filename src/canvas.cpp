@@ -9,10 +9,7 @@ Canvas::Canvas(int _width, int _height)
     layers[0] = LoadRenderTexture(width, height);
 
 
-    // You have to define all values
-    // for the camera to work
-
-    // Position the camera a lil' bit to the left so the drawin and the panel down overlap that much
+    // Position the camera a lil' bit to the left so the canvas and the panel don't overlap that much
     float camHOffset = -40;
 
     canvasView.target = {(float)width/2+camHOffset, (float)height/2};
@@ -20,20 +17,16 @@ Canvas::Canvas(int _width, int _height)
     canvasView.rotation = 0;
     canvasView.zoom = 0.8;
 
-    // Filling first layer
+    // First layer
     BeginTextureMode(layers[0]);
     ClearBackground(RAYWHITE);
     EndTextureMode();
 }
 
-Canvas::Canvas(CanvasData& c)
+Canvas::Canvas(CanvasData& c) :
+    width(c.width), height(c.height), 
+    canvasView(c.canvasView), layerAmount(c.layerAmount)
 {
-    // Load the easy stuff first
-    width = c.width;
-    height = c.height;
-    canvasView = c.canvasView;
-
-    layerAmount = c.layerAmount;
 }
 
 Image Canvas::_exportImage()

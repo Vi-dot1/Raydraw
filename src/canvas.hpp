@@ -7,7 +7,7 @@
 extern "C"{
     #include "raylib.h"
 }
-#define MAX_LAYERS 80
+constexpr size_t MAX_LAYERS = 80;
 
 /*
 Struct used to compact `Canvas` data to be saved

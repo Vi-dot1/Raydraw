@@ -1,6 +1,7 @@
 #include"mState.hpp"
 #include"canvas.hpp"
 
+#include"tool.hpp"
 #include"brush.hpp"
 
 void Brush::_drawTo(Canvas& canvas)
