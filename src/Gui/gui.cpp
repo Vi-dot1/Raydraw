@@ -63,20 +63,27 @@ void drawGui()
     );
 
     Vector2 mpos = Mouse::getPos();
+    
+    float zoom = 1;
+    if( Canvas::getCurrent() )
+    {
+        zoom = Canvas::getCurrent()->canvasView.zoom;
+    }
+    
     // What the mouse looks like in each state
     switch( Mouse::getState() )
     {
         case Mouse::State::draw:
-        DrawCircleLinesV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
+        DrawCircleLinesV(mpos, Tool::size*zoom, mColor);
         DrawCircleLinesV(mpos, 1, mColor);
         break;
 
         case Mouse::State::hold:
-        DrawCircleV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
+        DrawCircleV(mpos, Tool::size*zoom, mColor);
         break;
 
         default:
-        DrawCircleV(mpos, Tool::size*canvas.canvasView.zoom, mColor);
+        DrawCircleV(mpos, Tool::size*zoom, mColor);
         break;
     };
     

@@ -33,6 +33,7 @@ int main(int argc, char** argv)
 
 	LineTool b;
 	Canvas canvas(screenWidth, screenHeight);
+    Canvas::setCurrent(&canvas);
 
 	Vector2 mpos;
 	while(!WindowShouldClose())
@@ -70,12 +71,15 @@ int main(int argc, char** argv)
         
         // Redering
 		BeginDrawing();
-
 		DrawTexture(editorBackground, 0, 0, RAYWHITE);
-		canvas._draw();
+
+        if( Canvas::getCurrent() ) 
+        {
+            Canvas::getCurrent()->_draw();
+        }
+
 		Gui::drawGui();
 		if( !Mouse::wasAlreadyUsed() ) b._drawTo(canvas);
-
 		EndDrawing();
 	}
 
