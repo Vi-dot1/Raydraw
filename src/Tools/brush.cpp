@@ -1,14 +1,15 @@
-#include"mState.hpp"
+#include"Utils/mState.hpp"
 #include"canvas.hpp"
 
+#include"tool.hpp"
 #include"brush.hpp"
 
 void Brush::_drawTo(Canvas& canvas)
 {
-    const Mouse::State& mState = Mouse::getMouseState();
+    const Mouse::mState& state = Mouse::getMouseState();
 
     RenderTexture2D& target = canvas.getCurrentLayer();
-    Vector2 pos = canvas.localCoord(mState.pos);
+    Vector2 pos = canvas.localCoord(state.pos);
 
 	BeginTextureMode(target);
 

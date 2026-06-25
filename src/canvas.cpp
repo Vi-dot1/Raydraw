@@ -3,16 +3,15 @@
 #include <assert.h>
 #include <vector>
 
+Canvas* Canvas::currentCanvas = nullptr;
+
 Canvas::Canvas(int _width, int _height)
     : width(_width), height(_height)
 {
     layers[0] = LoadRenderTexture(width, height);
 
 
-    // You have to define all values
-    // for the camera to work
-
-    // Position the camera a lil' bit to the left so the drawin and the panel down overlap that much
+    // Position the camera a lil' bit to the left so the canvas and the panel don't overlap that much
     float camHOffset = -40;
 
     canvasView.target = {(float)width/2+camHOffset, (float)height/2};
@@ -20,20 +19,16 @@ Canvas::Canvas(int _width, int _height)
     canvasView.rotation = 0;
     canvasView.zoom = 0.8;
 
-    // Filling first layer
+    // First layer
     BeginTextureMode(layers[0]);
     ClearBackground(RAYWHITE);
     EndTextureMode();
 }
 
-Canvas::Canvas(CanvasData& c)
+Canvas::Canvas(CanvasData& c) :
+    width(c.width), height(c.height), 
+    canvasView(c.canvasView), layerAmount(c.layerAmount)
 {
-    // Load the easy stuff first
-    width = c.width;
-    height = c.height;
-    canvasView = c.canvasView;
-
-    layerAmount = c.layerAmount;
 }
 
 Image Canvas::_exportImage()
@@ -65,55 +60,62 @@ Image Canvas::_exportImage()
 }
 
 // TODO: test if this thing would even work
-void Canvas::_getData(CanvasData &c)
-{
+CanvasData Canvas::_getData()
+{ 
+    CanvasData c;
 
-    // Simple cofig data
     c.width = width;
     c.height = height;
     c.canvasView = canvasView;
-
-    // Layer data and format
     c.layerAmount = layerAmount;
 
-    c.bytesPerlayer = std::vector<int>(layerAmount);
 
-    int ImageByteSize = GetPixelDataSize(width, height, layers[currenLayer].texture.format);
-
-    // Make space in the data buffer for the image data
-    c.data.reset(new unsigned char[ImageByteSize*layerAmount]);
+    c.bytesPerlayer.reserve(layerAmount);
+    c.layerData.reserve(layerAmount);
 
     // Get into loading
-    for(int layerIdx=0, dataIdx=0; layerIdx<layerAmount; ++layerIdx)
+    for(int layerIdx=0; layerIdx<layerAmount; ++layerIdx)
     {
-        static Image img;
-
-        // First we loaded as the later an Image to move the data into ram
+        // First we loaded as an Image to move the data from gpu to ram
+        Image img;
         img = LoadImageFromTexture(layers[layerIdx].texture);
-
-        // Compress the img data using into a png
+        
+        // then we get the raw data of that image, this fuction will also give us its size
         int size;
-        unsigned char *layerBuffer = ExportImageToMemory(img, ".png", &size);
+        c.layerData.emplace_back(ExportImageToMemory(img, ".bmp", &size));
 
         // Save the amount of bytes in the layer
         c.bytesPerlayer[layerIdx] = size;
 
-        /* 
-        Write it in the data byte array,
-
-        Pay attention to the fact that the loop also increases dataIdx, 
-        all the layers are concadenated on the same buffer
-        
-        Done this since the main purpose of `CanvasData` is to be written into a binary file to save the canvas state
-        */
-        for(int i=0; i<size; ++i, ++dataIdx)
-        {
-            c.data.get()[dataIdx] = layerBuffer[i];
-        }
-
-        // Unload the layer image, free the layerBuffer data, rinse and repeat
         UnloadImage(img);
-        MemFree(layerBuffer);
+    }
+    return c;
+}
+
+void Canvas::_setData(const CanvasData &c)
+{
+    width = c.width;
+    height = c.height;
+    canvasView = c.canvasView;
+    layerAmount = c.layerAmount;
+
+    for(int layerIdx=0; layerIdx<layerAmount; ++layerIdx)
+    {
+        // We need to turn the image into a texture in order to draw it
+        Image img = LoadImageFromMemory(".bmp", c.layerData[layerIdx], c.bytesPerlayer[layerIdx]);
+        Texture tex = LoadTextureFromImage(img);
+
+        // Redo the layer
+        UnloadRenderTexture(layers[layerIdx]);
+        layers[layerIdx] = LoadRenderTexture(width, height);
+        
+        // ANd then we basically have to draw the layer into the texture
+        BeginTextureMode(layers[layerIdx]);
+            DrawTexture(tex, 0, 0, RAYWHITE);
+        EndTextureMode();
+        
+        UnloadImage(img);
+        UnloadTexture(tex);
     }
 }
 
@@ -127,7 +129,7 @@ Canvas::~Canvas()
 
 RenderTexture2D& Canvas::getCurrentLayer()
 {
-    return layers[currenLayer];
+    return layers[currenLayerIdx];
 }
 
 

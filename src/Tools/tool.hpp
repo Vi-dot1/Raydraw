@@ -15,5 +15,20 @@ public:
     inline static Color color = BLACK;
 
     // Thus the name
-    virtual void _drawTo(Canvas&);
+    virtual void _drawTo(Canvas&) = 0;
+
+
+private:
+    static Tool* currentTool;
+public:
+    static Tool* getCurrent() { return currentTool; }
+
+    static void setCurrent(Tool* t)
+    {
+        if( t == nullptr || typeid(*t) == typeid(Tool) )
+        {
+            return;
+        }
+        currentTool = t;
+    }
 };

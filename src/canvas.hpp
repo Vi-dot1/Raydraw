@@ -7,7 +7,7 @@
 extern "C"{
     #include "raylib.h"
 }
-#define MAX_LAYERS 80
+constexpr size_t MAX_LAYERS = 80;
 
 /*
 Struct used to compact `Canvas` data to be saved
@@ -18,13 +18,19 @@ struct CanvasData
     int height;
     Camera2D canvasView;
 
-
     size_t layerAmount;
-    std::vector<int> bytesPerlayer;
+    std::vector<size_t> bytesPerlayer;
 
-    // All the layers are packed into a byte array
-    // which will be read to get each layer back
-    std::unique_ptr<unsigned char[]> data;
+    // All the layers are packed into raw data
+    std::vector<unsigned char*> layerData;
+    
+    ~CanvasData()
+    {
+        for( auto layer : layerData )
+        {
+            MemFree(layer);
+        }
+    }
 };
 
 /* 
@@ -37,13 +43,13 @@ Features:
 class Canvas
 {
     RenderTexture2D layers[MAX_LAYERS];
-    size_t currenLayer=0, layerAmount=1;
+    size_t currenLayerIdx=0, layerAmount=1;
 
     // Canvas position in window
     Vector2 cPos = (Vector2){0, 0};
     int width, height;
     bool changed = false;
-
+    
 public:
     Camera2D canvasView;
 
@@ -60,23 +66,34 @@ public:
     void _draw();
 
     /*
-    Returns an `Image` of the canvas by overlapping all the layers top to bottom
-    The canvas will only give out the image, saving it as a file is not its responsability
+        Returns an `Image` of the canvas by overlapping all the layers top to bottom
+        The canvas will only give out the image, saving it as a file is not its responsability
     */
     Image _exportImage();
 
-    /*
-    Returns all the relevant data as a `CanvasData` object
-    */
-    void _getData(CanvasData &c);
+
+    // Returns all the relevant data as a `CanvasData` object
+    CanvasData _getData();
+    void _setData(const CanvasData &c);
 
     /*
-    Turns Screen coordinates to canvas coordinates, 
-    mostly used to get the coordinates where something should to be drawn
+        Turns Screen coordinates to Canvas coordinates, 
+        used to get the coordinates where we should draw
     */
     inline Vector2 localCoord(const Vector2 &coord) 
     { 
-        // This raylib function gets the Camera Matrix and multiplies coord by it
+        // Gets the Camera Matrix and multiplies coord by it
         return GetScreenToWorld2D(coord, canvasView);
     };
+    
+private:
+    static Canvas* currentCanvas;
+
+public:
+    static Canvas* getCurrent() { return currentCanvas; }
+    static void setCurrent(Canvas* c) 
+    {
+        if(c == nullptr) return;
+        currentCanvas = c;
+    }
 };
