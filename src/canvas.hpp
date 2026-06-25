@@ -18,13 +18,19 @@ struct CanvasData
     int height;
     Camera2D canvasView;
 
-
     size_t layerAmount;
-    std::vector<int> bytesPerlayer;
+    std::vector<size_t> bytesPerlayer;
 
-    // All the layers are packed into a byte array
-    // which will be read to get each layer back
-    std::unique_ptr<unsigned char[]> data;
+    // All the layers are packed into raw data
+    std::vector<unsigned char*> layerData;
+    
+    ~CanvasData()
+    {
+        for( auto layer : layerData )
+        {
+            MemFree(layer);
+        }
+    }
 };
 
 /* 
@@ -65,8 +71,10 @@ public:
     */
     Image _exportImage();
 
+
     // Returns all the relevant data as a `CanvasData` object
-    void _getData(CanvasData &c);
+    CanvasData _getData();
+    void _setData(const CanvasData &c);
 
     /*
         Turns Screen coordinates to Canvas coordinates, 
