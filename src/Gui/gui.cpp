@@ -12,7 +12,6 @@ extern "C"{
 
 // Proportion of the screen the panel occupies horizontally
 static float panelWidthScale = 0.22; 
-
 static Rectangle panelArea;
 float panelHMarging = 6;
 float panelVMarging = 4;
@@ -30,6 +29,7 @@ namespace Gui
 const int MAX_COLORS = 16;
 const int COLOR_PER_ROW = sqrt(MAX_COLORS);
 float colorBoxSize = (panelSquareSize)/COLOR_PER_ROW;
+
 static Color SavedColors[MAX_COLORS] =  {
     PINK,
     RED,
@@ -48,12 +48,14 @@ static Color SavedColors[MAX_COLORS] =  {
     DARKBROWN,
     BLACK,
 };
+
 int currentColor = 0;
 
-
-constexpr Color mColor = DARKGRAY;
-void drawGui()
+void canvasPanel()
 {
+    // Disallows drawing when the mouse is on top of the panel
+    if( CheckCollisionPointRec(Mouse::getPos(), panelArea) ) Mouse::markUsed();
+
     Color panelColor = (Color){112, 132, 122, 122};
     DrawRectanglePro(
         panelArea, 
@@ -61,9 +63,86 @@ void drawGui()
         0.0, 
         panelColor
     );
+    // Raygui's color picker also draws a hue bar on the side out of the given rect,
+    // So in order to make it fit on the panel I had to reduce its dimensions
+    float colorPickerSize = panelSquareSize-fontHeight-panelHMarging;
+    GuiColorPicker(
+        (Rectangle)
+        {
+            panelHMarging, panelVMarging,
+            colorPickerSize,
+            colorPickerSize 
+        },
+        nullptr, 
+        &(Tool::color)
+    );
+    SavedColors[currentColor] = Tool::color;
 
-    Vector2 mpos = Mouse::getPos();
-    
+    GuiLabel(
+        (Rectangle)
+        {
+            panelHMarging,
+            panelSquareSize,
+            panelSlider.x, panelSlider.y
+        }, 
+        "Colors"
+    );
+    // Brush Size, also havin some weird positioning due to the color picker...
+    GuiSlider(
+        (Rectangle)
+            {
+                panelHMarging, panelSquareSize-panelVMarging, 
+                panelSlider.x, panelSlider.y
+            }, 
+
+        nullptr, nullptr, &(Tool::size), 
+        1, 20
+    );
+
+    // Individual color boxes
+    const Vector2 colorBoxPos = {panelHMarging, panelSquareSize+fontHeight};
+
+    for(int i=0, color_idx=0; i<panelSquareSize-1 && color_idx<MAX_COLORS; i+=colorBoxSize)
+    {
+        for(int j=0; j<panelSquareSize; j+=colorBoxSize)
+        {
+
+            Rectangle colorBox = (Rectangle)
+            {
+                colorBoxPos.x+j, colorBoxPos.y+i, 
+                colorBoxSize, colorBoxSize
+            };
+
+            // The only way I found to show the color in the button is to draw a rectangle on top of it
+            // with the way raygui works means I must draw a button, then the rectangle with the color on top
+            // that means there's overdraw, there may be ways to optimize this
+            bool picked = currentColor == color_idx;
+            picked |= GuiButton
+            (
+                colorBox,
+                nullptr
+            );
+            DrawRectangleRec(
+                colorBox,
+                SavedColors[color_idx]
+            );
+
+            if( picked ) 
+            {
+                DrawRectangleLinesEx(colorBox, 2, RAYWHITE);
+                currentColor = color_idx;
+            }
+            ++color_idx;
+        }
+    }
+    Tool::color = SavedColors[currentColor];
+}
+
+constexpr Color mColor = DARKGRAY;
+void draw()
+{
+    const Vector2& mpos = Mouse::getPos();
+
     float zoom = 1;
     if( Canvas::getCurrent() )
     {
@@ -86,87 +165,6 @@ void drawGui()
         DrawCircleV(mpos, Tool::size*zoom, mColor);
         break;
     };
-    
-    {
-        // Raygui's color picker also draws a hue bar on the side out of the given rect,
-        // So in order to make it fit on the panel I had to reduce its dimensions
-        float colorPickerSize = panelSquareSize-fontHeight-panelHMarging;
-        GuiColorPicker(
-            (Rectangle)
-            {
-                panelHMarging, panelVMarging,
-                colorPickerSize,
-                colorPickerSize 
-            },
-            nullptr, 
-            &(Tool::color)
-        );
-
-        SavedColors[currentColor] = Tool::color;
-
-        GuiLabel(
-            (Rectangle)
-            {
-                panelHMarging,
-                panelSquareSize,
-                panelSlider.x, panelSlider.y
-            }, 
-            "Colors"
-        );
-        // Brush Size, also havin some weird positioning due to the color picker...
-        GuiSlider(
-            (Rectangle)
-                {
-                    panelHMarging, panelSquareSize-panelVMarging, 
-                    panelSlider.x, panelSlider.y
-                }, 
-
-            nullptr, nullptr, &(Tool::size), 
-            1, 20
-        );
-
-        // Individual color boxes
-        const Vector2 colorBoxPos = {panelHMarging, panelSquareSize+fontHeight};
-
-        for(int i=0, color_idx=0; i<panelSquareSize-1 && color_idx<MAX_COLORS; i+=colorBoxSize)
-        {
-            for(int j=0; j<panelSquareSize; j+=colorBoxSize)
-            {
-
-                Rectangle colorBox = (Rectangle)
-                {
-                    colorBoxPos.x+j, colorBoxPos.y+i, 
-                    colorBoxSize, colorBoxSize
-                };
-
-                // The only way I found to show the color in the button is to draw a rectangle on top of it
-                // with the way raygui works means I must draw a button, then the rectangle with the color on top
-                // that means there's overdraw, there may be ways to optimize this
-                bool picked = currentColor == color_idx;
-                picked |= GuiButton
-                (
-                    colorBox,
-                    nullptr
-                );
-                DrawRectangleRec(
-                    colorBox,
-                    SavedColors[color_idx]
-                );
-
-                if( picked ) 
-                {
-                    DrawRectangleLinesEx(colorBox, 2, RAYWHITE);
-                    currentColor = color_idx;
-                }
-                ++color_idx;
-            }
-        }
-        Tool::color = SavedColors[currentColor];
-        
-
-    }
-
-    if( CheckCollisionPointRec(Mouse::getPos(), panelArea) ) Mouse::markUsed();
 }
 
 void updatePanel()

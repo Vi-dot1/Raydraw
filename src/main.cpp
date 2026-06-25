@@ -1,15 +1,14 @@
-#include "Tools/LineTool.hpp"
-#include <iostream>
-#include <string>
 extern "C"{
-    #include"raylib.h"
+    #include "raylib.h"
 }
-#include"raymath.h"
+#include "raymath.h"
+
 
 #include "canvas.hpp"
 #include "Gui/gui.hpp"
 
-#include"Utils/mState.hpp"
+#include "Tools/brush.hpp"
+#include "Utils/mState.hpp"
 
 constexpr int screenHeight = 600, screenWidth = 800;
 
@@ -31,7 +30,7 @@ int main(int argc, char** argv)
 		)
 	);
 
-	LineTool b;
+	Brush b;
 	Canvas canvas(screenWidth, screenHeight);
     Canvas::setCurrent(&canvas);
 
@@ -52,20 +51,22 @@ int main(int argc, char** argv)
 			);
 		}
 
-		if(  IsKeyDown(KEY_LEFT_CONTROL) )
+        Mouse::setState(Mouse::State::draw);
+
+		if(  IsKeyDown(KEY_LEFT_CONTROL) and Canvas::getCurrent() )
 		{
-			if ( IsMouseButtonDown(MOUSE_BUTTON_LEFT) )
-				canvas.canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
-
-			canvas.canvasView.zoom += GetMouseWheelMove()*0.05;
-
-			// TO avoid drawing while dragging the screen
-			Mouse::markUsed();
 			Mouse::setState(Mouse::State::hold);
-		}
-		else
-		{
-			Mouse::setState(Mouse::State::draw);
+
+            // Handle Dragging
+			if ( IsMouseButtonDown(MOUSE_BUTTON_LEFT) )
+            {
+				Canvas::getCurrent()->canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
+            }
+            // Handle Zoom
+			Canvas::getCurrent()->canvasView.zoom += GetMouseWheelMove()*0.05;
+
+			// TO avoid drawing while dragging 
+			Mouse::markUsed();
 		}
 
         
@@ -78,7 +79,7 @@ int main(int argc, char** argv)
             Canvas::getCurrent()->_draw();
         }
 
-		Gui::drawGui();
+		Gui::draw();
 		if( !Mouse::wasAlreadyUsed() ) b._drawTo(canvas);
 		EndDrawing();
 	}
