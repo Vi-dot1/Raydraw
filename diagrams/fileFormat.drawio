@@ -1,0 +1,73 @@
+<mxfile host="65bd71144e">
+    <diagram id="GCY2N8iBlU3jyCoSXkrW" name="Page-1">
+        <mxGraphModel dx="1387" dy="635" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-14" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="10" y="20" width="105" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-12" value="" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-14">
+                    <mxGeometry width="100" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-13" value=".rdraw" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=24;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-14">
+                    <mxGeometry x="15" y="100" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-31" value="Data on how to create the canvas and the state it was saved is anexated at the start of the file" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=4;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="125" y="60" width="225" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-32" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="370" y="90" width="710" height="360" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-16" value="" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;fillColor=none;strokeWidth=4;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-32">
+                    <mxGeometry width="710" height="360" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-17" value="Hash" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=24;fillColor=#d80073;fontColor=#ffffff;strokeColor=#A50040;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-32">
+                    <mxGeometry x="18.44155844155844" y="20" width="230.5194805194805" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-18" value="Basic Canvas&lt;br&gt;Data" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=24;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-32">
+                    <mxGeometry x="258.18181818181813" y="20" width="442.5974025974026" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-19" value="Layer 1 Data" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=24;fillColor=#6a00ff;fontColor=#ffffff;strokeColor=#3700CC;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-32">
+                    <mxGeometry x="18.44155844155844" y="130" width="221.2987012987013" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-20" value="Layer 2 Data" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=24;fillColor=#6a00ff;fontColor=#ffffff;strokeColor=#3700CC;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-32">
+                    <mxGeometry x="248.96103896103892" y="130" width="212.07792207792207" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-21" value="Layer 3 Data" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=24;fillColor=#6a00ff;fontColor=#ffffff;strokeColor=#3700CC;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-32">
+                    <mxGeometry x="470.2597402597402" y="130" width="230.5194805194805" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-22" value="Layer n Data" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=24;fillColor=#6a00ff;fontColor=#ffffff;strokeColor=#3700CC;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-32">
+                    <mxGeometry x="451.81818181818176" y="240" width="248.96103896103892" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-23" value="etc..." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=4;fontSize=64;fontStyle=1;fontColor=#003366;" vertex="1" parent="Q450ZEcBeJYst12L80hJ-32">
+                    <mxGeometry x="193.6363636363636" y="280" width="55.324675324675326" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-24" style="edgeStyle=none;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;fontSize=64;" edge="1" parent="Q450ZEcBeJYst12L80hJ-32" source="Q450ZEcBeJYst12L80hJ-23" target="Q450ZEcBeJYst12L80hJ-23">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-33" value="A &lt;b&gt;DJB2&lt;/b&gt; hash made from the &lt;i&gt;CanvasData&lt;/i&gt; Object is appended at the start to ensure the file&lt;br style=&quot;font-size: 20px;&quot;&gt;is not corrupted on reload&lt;br&gt;&lt;br&gt;Any external tool made to modify it should also address this hash&lt;br&gt;&lt;br&gt;For more info on the &lt;i&gt;CanvasData&lt;/i&gt;, check source :)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=4;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="20" y="250" width="320" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-46" value="&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=24;fillColor=#6a00ff;fontColor=#ffffff;strokeColor=#3700CC;" vertex="1" parent="1">
+                    <mxGeometry x="370" y="530" width="700" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-48" value="Layer Data Block:" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=4;fontSize=32;fontColor=#FFFFFF;fontStyle=5" vertex="1" parent="1">
+                    <mxGeometry x="370" y="490" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-49" value="File Data Layout:" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=4;fontSize=32;fontColor=#FFFFFF;fontStyle=5" vertex="1" parent="1">
+                    <mxGeometry x="370" y="50" width="340" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-50" value="Layer Data Size" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=32;fontColor=#ffffff;fillColor=#a20025;strokeColor=#6F0000;" vertex="1" parent="1">
+                    <mxGeometry x="380" y="540" width="120" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-51" value="Layer Data" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=32;fontColor=#ffffff;fillColor=#6d8764;strokeColor=#3A5431;" vertex="1" parent="1">
+                    <mxGeometry x="510" y="540" width="550" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="Q450ZEcBeJYst12L80hJ-52" value="A layer data block has a &lt;b&gt;variable&lt;/b&gt; size, so each block start with a &lt;i&gt;size_t&lt;/i&gt; value saving the size of the next layer" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeWidth=4;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="30" y="595" width="280" height="170" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
