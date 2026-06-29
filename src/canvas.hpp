@@ -85,15 +85,4 @@ public:
         // Gets the Camera Matrix and multiplies coord by it
         return GetScreenToWorld2D(coord, canvasView);
     };
-    
-private:
-    static Canvas* currentCanvas;
-
-public:
-    static Canvas* getCurrent() { return currentCanvas; }
-    static void setCurrent(Canvas* c) 
-    {
-        if(c == nullptr) return;
-        currentCanvas = c;
-    }
 };

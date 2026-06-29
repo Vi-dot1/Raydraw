@@ -3,8 +3,6 @@
 #include <assert.h>
 #include <vector>
 
-Canvas* Canvas::currentCanvas = nullptr;
-
 Canvas::Canvas(int _width, int _height)
     : width(_width), height(_height)
 {
