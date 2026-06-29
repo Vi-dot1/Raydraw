@@ -8,7 +8,9 @@ extern "C"{
 #include "Gui/gui.hpp"
 
 #include "Tools/brush.hpp"
-#include "Utils/mState.hpp"
+
+#include "Utils/mouseState.hpp"
+#include "Utils/generalState.hpp"
 
 constexpr int screenHeight = 600, screenWidth = 800;
 
@@ -32,7 +34,8 @@ int main(int argc, char** argv)
 
 	Brush b;
 	Canvas canvas(screenWidth, screenHeight);
-    Canvas::setCurrent(&canvas);
+    
+    Program::setCurrentCanvas(&canvas);
 
 	Vector2 mpos;
 	while(!WindowShouldClose())
@@ -50,33 +53,31 @@ int main(int argc, char** argv)
 				)
 			);
 		}
-
+        
         Mouse::setState(Mouse::State::draw);
-
-		if(  IsKeyDown(KEY_LEFT_CONTROL) and Canvas::getCurrent() )
+		if(  IsKeyDown(KEY_LEFT_CONTROL) and Program::getCurrentCanvas() )
 		{
 			Mouse::setState(Mouse::State::hold);
 
             // Handle Dragging
 			if ( IsMouseButtonDown(MOUSE_BUTTON_LEFT) )
             {
-				Canvas::getCurrent()->canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
+				Program::getCurrentCanvas()->canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
             }
             // Handle Zoom
-			Canvas::getCurrent()->canvasView.zoom += GetMouseWheelMove()*0.05;
+			Program::getCurrentCanvas()->canvasView.zoom += GetMouseWheelMove()*0.05;
 
 			// TO avoid drawing while dragging 
 			Mouse::markUsed();
 		}
-
         
         // Redering
 		BeginDrawing();
 		DrawTexture(editorBackground, 0, 0, RAYWHITE);
 
-        if( Canvas::getCurrent() ) 
+        if( Program::getCurrentCanvas() ) 
         {
-            Canvas::getCurrent()->_draw();
+            Program::getCurrentCanvas()->_draw();
         }
 
 		Gui::draw();
@@ -86,8 +87,5 @@ int main(int argc, char** argv)
 
 	CloseWindow();
 	UnloadTexture(editorBackground);
-
-	CanvasData c;
-	canvas._getData(c);
 	return 0;
 }

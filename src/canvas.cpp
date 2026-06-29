@@ -24,8 +24,8 @@ Canvas::Canvas(int _width, int _height)
 }
 
 Canvas::Canvas(CanvasData& c) :
-    width(c.width), height(c.height), 
-    canvasView(c.canvasView), layerAmount(c.layerAmount)
+    width(c.props.width), height(c.props.height), 
+    canvasView(c.props.canvasView), layerAmount(c.layerAmount)
 {
 }
 
@@ -62,11 +62,10 @@ CanvasData Canvas::_getData()
 { 
     CanvasData c;
 
-    c.width = width;
-    c.height = height;
-    c.canvasView = canvasView;
+    c.props.width = width;
+    c.props.height = height;
+    c.props.canvasView = canvasView;
     c.layerAmount = layerAmount;
-
 
     c.bytesPerlayer.reserve(layerAmount);
     c.layerData.reserve(layerAmount);
@@ -92,9 +91,9 @@ CanvasData Canvas::_getData()
 
 void Canvas::_setData(const CanvasData &c)
 {
-    width = c.width;
-    height = c.height;
-    canvasView = c.canvasView;
+    width = c.props.width;
+    height = c.props.height;
+    canvasView = c.props.canvasView;
     layerAmount = c.layerAmount;
 
     for(int layerIdx=0; layerIdx<layerAmount; ++layerIdx)

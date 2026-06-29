@@ -1,9 +1,9 @@
 #include "raylib.h"
 
-#include "Utils/mState.hpp"
+#include "Utils/mouseState.hpp"
 
 #include "canvas.hpp"
-#include "LineTool.hpp"
+#include "lineTool.hpp"
 #include "tool.hpp"
 
 void LineTool::_drawTo(Canvas& canvas)

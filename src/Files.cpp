@@ -3,6 +3,7 @@
 #include "raylib.h"
 
 
+#include <cstddef>
 #include <filesystem>
 #include <fstream>
 
@@ -50,7 +51,32 @@ void saveCanvasAsRdraw(const std::string pathStr, Canvas& c)
     std::ofstream file(pathStr, std::ios::binary);
 
     CanvasData cData = c._getData();
-    unsigned long hash = computeHash(reinterpret_cast<char*>(&cData), sizeof(CanvasData));
+    
+    // Extra properties
+    file.write(reinterpret_cast<const char*>(&cData.props), sizeof(CanvasProperties));
+
+    file.write(reinterpret_cast<const char*>(cData.layerAmount), sizeof(size_t));
+
+    // For each layer
+    for(size_t i=0; i<cData.layerAmount; ++i)
+    {
+        // Write layer size
+        file.write(reinterpret_cast<const char*>(cData.bytesPerlayer[i]), sizeof(size_t));
+        // Write layer data
+        file.write(reinterpret_cast<const char*>(cData.layerData[i]), cData.bytesPerlayer[i]);
+    }
+}
+
+CanvasData loadRdrawFile(const std::string pathStr)
+{
+    fs::path path(pathStr);
+    
+    std::ifstream file(pathStr, std::ios::binary);
+
+    CanvasData cData;
+    
+    file.read(reinterpret_cast<char*>(&cData.props), sizeof(CanvasProperties));
+    file.read(reinterpret_cast<char*>(cData.layerAmount), sizeof(size_t));
 }
 
 }

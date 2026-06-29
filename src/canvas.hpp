@@ -12,11 +12,17 @@ constexpr size_t MAX_LAYERS = 80;
 /*
 Struct used to compact `Canvas` data to be saved
 */
-struct CanvasData
+
+struct CanvasProperties
 {
     int width;
     int height;
     Camera2D canvasView;
+};
+
+struct CanvasData
+{
+    CanvasProperties props;
 
     size_t layerAmount;
     std::vector<size_t> bytesPerlayer;
@@ -32,6 +38,7 @@ struct CanvasData
         }
     }
 };
+
 
 /* 
 Used to create and represent canvas objects.

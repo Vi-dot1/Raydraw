@@ -5,7 +5,8 @@ extern "C"{
     #include"raygui.h"
 }
 
-#include"Utils/mState.hpp"
+#include"Utils/generalState.hpp"
+#include"Utils/mouseState.hpp"
 #include"Tools/tool.hpp"
 #include"gui.hpp"
 
@@ -144,9 +145,9 @@ void draw()
     const Vector2& mpos = Mouse::getPos();
 
     float zoom = 1;
-    if( Canvas::getCurrent() )
+    if( Program::getCurrentCanvas() )
     {
-        zoom = Canvas::getCurrent()->canvasView.zoom;
+        zoom = Program::getCurrentCanvas()->canvasView.zoom;
     }
     
     // What the mouse looks like in each state
