@@ -1,3 +1,4 @@
+#include <iostream>
 extern "C"{
     #include "raylib.h"
 }
@@ -11,6 +12,8 @@ extern "C"{
 
 #include "Utils/mouseState.hpp"
 #include "Utils/generalState.hpp"
+
+#include"Files.hpp"
 
 constexpr int screenHeight = 600, screenWidth = 800;
 
@@ -34,8 +37,16 @@ int main(int argc, char** argv)
 
 	Brush b;
 	Canvas canvas(screenWidth, screenHeight);
-    
+// 
+// CanvasData cData = Files::loadRdrawFile("file.rdraw");
+// if( !cData.isNull() ){
+//     std::cout<<"File loaded"<<std::endl;
+//     canvas._setData(cData);
+// }
+//
     Program::setCurrentCanvas(&canvas);
+
+    auto cData1 = canvas._getData();
 
 	Vector2 mpos;
 	while(!WindowShouldClose())
@@ -71,6 +82,12 @@ int main(int argc, char** argv)
 			Mouse::markUsed();
 		}
         
+        if(IsKeyDown(KEY_LEFT_SHIFT) && IsKeyPressed(KEY_S))
+        {
+            Files::saveCanvasAsPng("image.png", *Program::getCurrentCanvas());
+            std::cout<<"Image saved!"<<std::endl;
+        }
+        
         // Redering
 		BeginDrawing();
 		DrawTexture(editorBackground, 0, 0, RAYWHITE);
@@ -84,6 +101,9 @@ int main(int argc, char** argv)
 		if( !Mouse::wasAlreadyUsed() ) b._drawTo(canvas);
 		EndDrawing();
 	}
+    
+    auto cData = canvas._getData();
+    Files::saveCanvasAsRdraw("file.rdraw", cData);
 
 	CloseWindow();
 	UnloadTexture(editorBackground);

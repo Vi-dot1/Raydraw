@@ -40,22 +40,13 @@ void saveCanvasAsPng(const std::string pathStr, Canvas& c)
 }
 
 // Saves file as an .rdraw file
-void saveCanvasAsRdraw(const std::string pathStr, Canvas& c)
+void saveCanvasAsRdraw(const std::string pathStr, CanvasData& cData)
 {
-    fs::path path(pathStr);
-    
-    if( fs::is_directory(path) || path.extension() != ".rdraw")
-    {
-        return;
-    }
     std::ofstream file(pathStr, std::ios::binary);
 
-    CanvasData cData = c._getData();
-    
     // Extra properties
     file.write(reinterpret_cast<const char*>(&cData.props), sizeof(CanvasProperties));
-
-    file.write(reinterpret_cast<const char*>(cData.layerAmount), sizeof(size_t));
+    file.write(reinterpret_cast<const char*>(&cData.layerAmount), sizeof(size_t));
 
     // For each layer
     for(size_t i=0; i<cData.layerAmount; ++i)
@@ -70,13 +61,37 @@ void saveCanvasAsRdraw(const std::string pathStr, Canvas& c)
 CanvasData loadRdrawFile(const std::string pathStr)
 {
     fs::path path(pathStr);
-    
+    if( !fs::exists(path))
+    {
+        return NullCanvas;
+    }
+    if(fs::is_directory(path) || path.extension() != ".rdraw")
+    {
+        return NullCanvas;
+    }
     std::ifstream file(pathStr, std::ios::binary);
 
     CanvasData cData;
-    
     file.read(reinterpret_cast<char*>(&cData.props), sizeof(CanvasProperties));
-    file.read(reinterpret_cast<char*>(cData.layerAmount), sizeof(size_t));
+    file.read(reinterpret_cast<char*>(&cData.layerAmount), sizeof(size_t));
+
+    // For each layer
+    for(size_t i=0; i<cData.layerAmount; ++i)
+    {
+        size_t bytes;
+        // Read layer size
+        file.read(reinterpret_cast<char*>(&bytes), sizeof(size_t));
+        
+        unsigned char* layer = new unsigned char[bytes];
+
+        // Read layer data, why tf I need to cast this again?
+        file.read(reinterpret_cast<char*>(&bytes), bytes);
+        
+        // Write to canvas data
+        cData.bytesPerlayer.push_back(bytes);
+        cData.layerData.emplace_back(layer);
+    }
+    return cData;
 }
 
 }

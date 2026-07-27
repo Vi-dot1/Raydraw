@@ -37,7 +37,15 @@ struct CanvasData
             MemFree(layer);
         }
     }
+    
+    // TODO: Find a way to check if this function is NullCanvas
+    bool isNull(){
+        return layerAmount == 0;
+    }
 };
+static const CanvasData NullCanvas = {
+    {0,0, {}},
+     0, {0}, {nullptr}};
 
 
 /* 

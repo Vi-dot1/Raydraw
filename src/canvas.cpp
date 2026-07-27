@@ -82,7 +82,7 @@ CanvasData Canvas::_getData()
         c.layerData.emplace_back(ExportImageToMemory(img, ".bmp", &size));
 
         // Save the amount of bytes in the layer
-        c.bytesPerlayer[layerIdx] = size;
+        c.bytesPerlayer.push_back(size);
 
         UnloadImage(img);
     }
