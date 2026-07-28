@@ -37,16 +37,17 @@ int main(int argc, char** argv)
 
 	Brush b;
 	Canvas canvas(screenWidth, screenHeight);
-// 
-// CanvasData cData = Files::loadRdrawFile("file.rdraw");
-// if( !cData.isNull() ){
-//     std::cout<<"File loaded"<<std::endl;
-//     canvas._setData(cData);
-// }
-//
-    Program::setCurrentCanvas(&canvas);
+ 
+    // Ok so I need cData to get dropped so I'll just make another scope
+    {
+        CanvasData cData = Files::loadRdrawFile("file.rdraw");
+        if( !cData.isNull() ) {
+            std::cout<<"File loaded"<<std::endl;
+            canvas._setData(cData);
+        }
+    }
 
-    auto cData1 = canvas._getData();
+    Program::setCurrentCanvas(&canvas);
 
 	Vector2 mpos;
 	while(!WindowShouldClose())
@@ -103,7 +104,7 @@ int main(int argc, char** argv)
 	}
     
     auto cData = canvas._getData();
-    Files::saveCanvasAsRdraw("file.rdraw", cData);
+    Files::saveAsRdraw("file.rdraw", cData);
 
 	CloseWindow();
 	UnloadTexture(editorBackground);

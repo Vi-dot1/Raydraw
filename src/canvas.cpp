@@ -65,27 +65,23 @@ CanvasData Canvas::_getData()
     c.props.width = width;
     c.props.height = height;
     c.props.canvasView = canvasView;
+
     c.layerAmount = layerAmount;
 
-    c.bytesPerlayer.reserve(layerAmount);
     c.layerData.reserve(layerAmount);
 
     // Get into loading
     for(int layerIdx=0; layerIdx<layerAmount; ++layerIdx)
     {
-        // First we loaded as an Image to move the data from gpu to ram
-        Image img;
-        img = LoadImageFromTexture(layers[layerIdx].texture);
-        
-        // then we get the raw data of that image, this fuction will also give us its size
-        int size;
-        c.layerData.emplace_back(ExportImageToMemory(img, ".bmp", &size));
-
-        // Save the amount of bytes in the layer
-        c.bytesPerlayer.push_back(size);
-
-        UnloadImage(img);
+        // The process of getting the actual raw data of the image is up to the
+        // Files module 
+        c.layerData.emplace_back(LoadImageFromTexture(layers[layerIdx].texture));
     }
+    
+    // I just hope no one pases a 0 layers canvas...
+    c.layerSize = GetPixelDataSize(width, height, c.layerData[0].format);
+    c.props.format = c.layerData[0].format;
+    
     return c;
 }
 
@@ -99,8 +95,7 @@ void Canvas::_setData(const CanvasData &c)
     for(int layerIdx=0; layerIdx<layerAmount; ++layerIdx)
     {
         // We need to turn the image into a texture in order to draw it
-        Image img = LoadImageFromMemory(".bmp", c.layerData[layerIdx], c.bytesPerlayer[layerIdx]);
-        Texture tex = LoadTextureFromImage(img);
+        Texture tex = LoadTextureFromImage(c.layerData[layerIdx]);
 
         // Redo the layer
         UnloadRenderTexture(layers[layerIdx]);
@@ -110,8 +105,6 @@ void Canvas::_setData(const CanvasData &c)
         BeginTextureMode(layers[layerIdx]);
             DrawTexture(tex, 0, 0, RAYWHITE);
         EndTextureMode();
-        
-        UnloadImage(img);
         UnloadTexture(tex);
     }
 }

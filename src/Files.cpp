@@ -40,21 +40,19 @@ void saveCanvasAsPng(const std::string pathStr, Canvas& c)
 }
 
 // Saves file as an .rdraw file
-void saveCanvasAsRdraw(const std::string pathStr, CanvasData& cData)
+void saveAsRdraw(const std::string pathStr, CanvasData& cData)
 {
     std::ofstream file(pathStr, std::ios::binary);
 
     // Extra properties
     file.write(reinterpret_cast<const char*>(&cData.props), sizeof(CanvasProperties));
     file.write(reinterpret_cast<const char*>(&cData.layerAmount), sizeof(size_t));
+    file.write(reinterpret_cast<const char*>(&cData.layerSize), sizeof(size_t));
 
     // For each layer
     for(size_t i=0; i<cData.layerAmount; ++i)
     {
-        // Write layer size
-        file.write(reinterpret_cast<const char*>(cData.bytesPerlayer[i]), sizeof(size_t));
-        // Write layer data
-        file.write(reinterpret_cast<const char*>(cData.layerData[i]), cData.bytesPerlayer[i]);
+        file.write(reinterpret_cast<const char*>(cData.layerData[i].data), cData.layerSize);
     }
 }
 
@@ -63,35 +61,49 @@ CanvasData loadRdrawFile(const std::string pathStr)
     fs::path path(pathStr);
     if( !fs::exists(path))
     {
-        return NullCanvas;
+        return CanvasData();
     }
     if(fs::is_directory(path) || path.extension() != ".rdraw")
     {
-        return NullCanvas;
+        return CanvasData();
     }
     std::ifstream file(pathStr, std::ios::binary);
 
     CanvasData cData;
     file.read(reinterpret_cast<char*>(&cData.props), sizeof(CanvasProperties));
     file.read(reinterpret_cast<char*>(&cData.layerAmount), sizeof(size_t));
+    file.read(reinterpret_cast<char*>(&cData.layerSize), sizeof(size_t));
 
     // For each layer
     for(size_t i=0; i<cData.layerAmount; ++i)
     {
-        size_t bytes;
-        // Read layer size
-        file.read(reinterpret_cast<char*>(&bytes), sizeof(size_t));
         
-        unsigned char* layer = new unsigned char[bytes];
+        // Why not `new`? I just wated to use the same methods that raylib uses internally, just in case
+        unsigned char* data = (unsigned char*)RL_CALLOC(cData.layerSize, sizeof(unsigned char));
+        
+        // This whole thing works over the idea that every layer has the same size 
+        // due to having the same dimensions and format
+        file.read(reinterpret_cast<char*>(data), cData.layerSize);
 
-        // Read layer data, why tf I need to cast this again?
-        file.read(reinterpret_cast<char*>(&bytes), bytes);
-        
-        // Write to canvas data
-        cData.bytesPerlayer.push_back(bytes);
-        cData.layerData.emplace_back(layer);
+        cData.layerData.emplace_back(
+            Image{
+                data, 
+                cData.props.width, 
+                cData.props.height, 
+                1, 
+                cData.props.format
+        });
     }
-    return cData;
+
+    // C++ trivia (yey!): Passing cData by copy will invalidate the data
+    //
+    // CanvasData destructor automatically cleans the image data 
+    // If you return it by copy, all the data pointer in the images will be invalid
+    // and everything will crash and be so sad
+    // 
+    // The solutions are either not use the automatic clean-up or use move semantics
+    // (Muchas gracias theCherno)
+    return std::move(cData);
 }
 
 }

@@ -8,7 +8,7 @@ namespace Files
 
 void saveCanvasAsPng(const std::string path, Canvas& c);
 
-void saveCanvasAsRdraw(const std::string pathStr, CanvasData& cData);
+void saveAsRdraw(const std::string pathStr, CanvasData& cData);
 CanvasData loadRdrawFile(const std::string pathStr);
 
 }
