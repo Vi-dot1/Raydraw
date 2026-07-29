@@ -103,7 +103,19 @@ void Canvas::_setData(const CanvasData &c)
         
         // ANd then we basically have to draw the layer into the texture
         BeginTextureMode(layers[layerIdx]);
-            DrawTexture(tex, 0, 0, RAYWHITE);
+            // NOTE: Render texture must be y-flipped due to default OpenGL coordinates (left-bottom)
+            DrawTextureRec(
+                tex, 
+                (Rectangle)
+                    {
+                        0,0, 
+                        (float)layers[0].texture.width, 
+                        (float)-layers[0].texture.height 
+                    }, 
+
+                (Vector2){0, 0}, 
+                WHITE
+            );
         EndTextureMode();
         UnloadTexture(tex);
     }
