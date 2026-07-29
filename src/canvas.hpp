@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include<cstddef>
 #include <memory>
 #include <vector>
@@ -12,26 +13,65 @@ constexpr size_t MAX_LAYERS = 80;
 /*
 Struct used to compact `Canvas` data to be saved
 */
+
+struct CanvasProperties
+{
+    int width = 0;
+    int height = 0;
+    int format = 0;
+    Camera2D canvasView;
+};
+
 struct CanvasData
 {
-    int width;
-    int height;
-    Camera2D canvasView;
+    CanvasProperties props = {0, 0, 0, {0, 0, 0, 0}};
+    size_t layerAmount = 0; // Needed when saved into a file
 
-    size_t layerAmount;
-    std::vector<size_t> bytesPerlayer;
-
-    // All the layers are packed into raw data
-    std::vector<unsigned char*> layerData;
+    // Layer size is only affected by dimensions and imae format, 
+    // each layer has the same size
+    size_t layerSize = 0; 
+    std::vector<Image> layerData;
     
+    // Just in case...
     ~CanvasData()
     {
         for( auto layer : layerData )
         {
-            MemFree(layer);
+            UnloadImage(layer);
         }
     }
+    
+    // Empty constructor
+    CanvasData(){}
+
+    // And due to the destructor above, let's not allow copying
+    // to avoid having invalid pointers
+    CanvasData(const CanvasData&cData)
+    {
+        this->layerData = cData.layerData;
+        this->layerAmount = cData.layerAmount;
+        this->layerSize = cData.layerSize;
+        this->props = cData.props;
+    }
+    CanvasData(CanvasData &&cData)
+    {
+        this->layerData = std::move(cData.layerData);
+        // To avoid the destructor from unloading the images
+        cData.layerData.clear();
+
+        // This are all just primitives, copy is fine
+        this->layerAmount = cData.layerAmount;
+        this->layerSize = cData.layerSize;
+        this->props = cData.props;
+    }
+
+    
+    bool isNull(){
+        return layerAmount == 0;
+    }
 };
+
+
 
 /* 
 Used to create and represent canvas objects.
@@ -85,15 +125,4 @@ public:
         // Gets the Camera Matrix and multiplies coord by it
         return GetScreenToWorld2D(coord, canvasView);
     };
-    
-private:
-    static Canvas* currentCanvas;
-
-public:
-    static Canvas* getCurrent() { return currentCanvas; }
-    static void setCurrent(Canvas* c) 
-    {
-        if(c == nullptr) return;
-        currentCanvas = c;
-    }
 };

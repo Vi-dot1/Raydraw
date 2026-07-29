@@ -1,3 +1,4 @@
+#include <iostream>
 extern "C"{
     #include "raylib.h"
 }
@@ -8,7 +9,11 @@ extern "C"{
 #include "Gui/gui.hpp"
 
 #include "Tools/brush.hpp"
-#include "Utils/mState.hpp"
+
+#include "Utils/mouseState.hpp"
+#include "Utils/generalState.hpp"
+
+#include"Files.hpp"
 
 constexpr int screenHeight = 600, screenWidth = 800;
 
@@ -32,7 +37,17 @@ int main(int argc, char** argv)
 
 	Brush b;
 	Canvas canvas(screenWidth, screenHeight);
-    Canvas::setCurrent(&canvas);
+ 
+    // Ok so I need cData to get dropped so I'll just make another scope
+    {
+        CanvasData cData = Files::loadRdrawFile("file.rdraw");
+        if( !cData.isNull() ) {
+            std::cout<<"File loaded"<<std::endl;
+            canvas._setData(cData);
+        }
+    }
+
+    Program::setCurrentCanvas(&canvas);
 
 	Vector2 mpos;
 	while(!WindowShouldClose())
@@ -50,44 +65,48 @@ int main(int argc, char** argv)
 				)
 			);
 		}
-
+        
         Mouse::setState(Mouse::State::draw);
-
-		if(  IsKeyDown(KEY_LEFT_CONTROL) and Canvas::getCurrent() )
+		if(  IsKeyDown(KEY_LEFT_CONTROL) and Program::getCurrentCanvas() )
 		{
 			Mouse::setState(Mouse::State::hold);
 
             // Handle Dragging
 			if ( IsMouseButtonDown(MOUSE_BUTTON_LEFT) )
             {
-				Canvas::getCurrent()->canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
+				Program::getCurrentCanvas()->canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
             }
             // Handle Zoom
-			Canvas::getCurrent()->canvasView.zoom += GetMouseWheelMove()*0.05;
+			Program::getCurrentCanvas()->canvasView.zoom += GetMouseWheelMove()*0.05;
 
 			// TO avoid drawing while dragging 
 			Mouse::markUsed();
 		}
-
+        
+        if(IsKeyDown(KEY_LEFT_SHIFT) && IsKeyPressed(KEY_S))
+        {
+            Files::saveCanvasAsPng("image.png", *Program::getCurrentCanvas());
+            std::cout<<"Image saved!"<<std::endl;
+        }
         
         // Redering
 		BeginDrawing();
 		DrawTexture(editorBackground, 0, 0, RAYWHITE);
 
-        if( Canvas::getCurrent() ) 
+        if( Program::getCurrentCanvas() ) 
         {
-            Canvas::getCurrent()->_draw();
+            Program::getCurrentCanvas()->_draw();
         }
 
 		Gui::draw();
 		if( !Mouse::wasAlreadyUsed() ) b._drawTo(canvas);
 		EndDrawing();
 	}
+    
+    auto cData = canvas._getData();
+    Files::saveAsRdraw("file.rdraw", cData);
 
 	CloseWindow();
 	UnloadTexture(editorBackground);
-
-	CanvasData c;
-	canvas._getData(c);
 	return 0;
 }

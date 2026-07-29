@@ -1,5 +1,5 @@
 #include"raylib.h"
-#include"Utils/mState.hpp"
+#include"Utils/mouseState.hpp"
 
 
 namespace Mouse

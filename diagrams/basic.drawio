@@ -1,47 +1,63 @@
 <mxfile host="65bd71144e">
     <diagram id="GCY2N8iBlU3jyCoSXkrW" name="Page-1">
-        <mxGraphModel dx="483" dy="381" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+        <mxGraphModel dx="1189" dy="544" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="2" value="Canvas" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="200" y="200" width="240" height="120" as="geometry">
-                        <mxRectangle x="90" y="80" width="80" height="30" as="alternateBounds"/>
-                    </mxGeometry>
+                <mxCell id="12" value="Program Layer Format" style="swimlane;startSize=30;horizontal=1;containerType=tree;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="30" width="470" height="340" as="geometry"/>
                 </mxCell>
-                <mxCell id="3" value="RenderTexture2D layers[MAX_LAYERS]" style="text;strokeColor=default;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="2" vertex="1">
-                    <mxGeometry y="30" width="240" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="4" value="size_t currentLayerIdx" style="text;strokeColor=default;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="2" vertex="1">
-                    <mxGeometry y="60" width="240" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="5" value="void _draw()" style="text;strokeColor=default;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="2" vertex="1">
-                    <mxGeometry y="90" width="240" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="6" value="Tool (Interface)" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="500" y="60" width="240" height="120" as="geometry">
-                        <mxRectangle x="90" y="80" width="80" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="7" value="virtual void _drawTo(Canvas&amp;amp;) = 0" style="text;strokeColor=default;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="6" vertex="1">
-                    <mxGeometry y="30" width="240" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="8" value="static Color color" style="text;strokeColor=default;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="6" vertex="1">
-                    <mxGeometry y="60" width="240" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="9" value="static float size" style="text;strokeColor=default;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="6" vertex="1">
-                    <mxGeometry y="90" width="240" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="12" value="Making them global makes color and size settings be shared for all tools" style="text;align=center;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;fontStyle=1" parent="1" vertex="1">
-                    <mxGeometry x="760" y="80" width="160" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="WFQkooiPr72wgSsfgopB-28" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="1" source="7" target="2" edge="1">
+                <mxCell id="13" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;startArrow=classic;endArrow=none;rounded=0;curved=0;endFill=0;startFill=1;" parent="12" source="14" target="15" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="WFQkooiPr72wgSsfgopB-29" value="Process" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="WFQkooiPr72wgSsfgopB-28" vertex="1" connectable="0">
-                    <mxGeometry x="0.0757" y="3" relative="1" as="geometry">
-                        <mxPoint x="58" y="-3" as="offset"/>
+                <mxCell id="33" value="Render" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="13">
+                    <mxGeometry x="-0.4874" y="2" relative="1" as="geometry">
+                        <mxPoint x="-2" y="15" as="offset"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="14" value="Graphical Elements" style="whiteSpace=wrap;html=1;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" parent="12" vertex="1">
+                    <mxGeometry x="77.5" y="50" width="135" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="Main Logic&lt;br&gt;and &lt;br&gt;Memory Representation" style="whiteSpace=wrap;html=1;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" parent="12" vertex="1">
+                    <mxGeometry x="62.5" y="160" width="165" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;startArrow=classic;endArrow=classic;rounded=0;curved=0;endFill=1;startFill=1;" parent="12" source="15" target="19" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="560" y="180" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="19" value="Saving/Loading&lt;br&gt;System" style="whiteSpace=wrap;html=1;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" parent="12" vertex="1">
+                    <mxGeometry x="77.5" y="270" width="135" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" style="edgeStyle=elbowEdgeStyle;html=1;startArrow=classic;endArrow=classic;startFill=1;endFill=1;" edge="1" parent="12" source="28" target="14">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="363" y="120"/>
+                            <mxPoint x="340" y="120"/>
+                            <mxPoint x="290" y="80"/>
+                            <mxPoint x="360" y="100"/>
+                            <mxPoint x="350" y="100"/>
+                            <mxPoint x="360" y="110"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="31" style="edgeStyle=elbowEdgeStyle;html=1;startArrow=classic;endArrow=classic;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endFill=1;startFill=1;" edge="1" parent="12" source="28" target="15">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="General State" style="whiteSpace=wrap;html=1;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="12">
+                    <mxGeometry x="280" y="160" width="165" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="So the main idea here is to separate the program into 3 main layers" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="570" y="40" width="240" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="&lt;b&gt;Graphical Elements:&lt;/b&gt;&lt;br&gt;Everything used to present stuff on the screen, the implementation of how something is rendered might be given by the component but the when and where is done by this layer" style="text;strokeColor=none;align=left;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="570" y="130" width="240" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="&lt;b&gt;Main Logic and Memory Representation:&lt;/b&gt;&lt;br&gt;The code that handdles how stuff is represented and managed in memory" style="text;strokeColor=none;align=left;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="570" y="200" width="240" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="&lt;b&gt;Saving/Loading System:&lt;/b&gt;&lt;br&gt;Mechanism in charge loading data from disk to memory or viceversa, sending data from disk to memory" style="text;strokeColor=none;align=left;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="570" y="280" width="240" height="80" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

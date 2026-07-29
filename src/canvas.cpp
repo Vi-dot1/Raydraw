@@ -3,8 +3,6 @@
 #include <assert.h>
 #include <vector>
 
-Canvas* Canvas::currentCanvas = nullptr;
-
 Canvas::Canvas(int _width, int _height)
     : width(_width), height(_height)
 {
@@ -26,8 +24,8 @@ Canvas::Canvas(int _width, int _height)
 }
 
 Canvas::Canvas(CanvasData& c) :
-    width(c.width), height(c.height), 
-    canvasView(c.canvasView), layerAmount(c.layerAmount)
+    width(c.props.width), height(c.props.height), 
+    canvasView(c.props.canvasView), layerAmount(c.layerAmount)
 {
 }
 
@@ -64,46 +62,40 @@ CanvasData Canvas::_getData()
 { 
     CanvasData c;
 
-    c.width = width;
-    c.height = height;
-    c.canvasView = canvasView;
+    c.props.width = width;
+    c.props.height = height;
+    c.props.canvasView = canvasView;
+
     c.layerAmount = layerAmount;
 
-
-    c.bytesPerlayer.reserve(layerAmount);
     c.layerData.reserve(layerAmount);
 
     // Get into loading
     for(int layerIdx=0; layerIdx<layerAmount; ++layerIdx)
     {
-        // First we loaded as an Image to move the data from gpu to ram
-        Image img;
-        img = LoadImageFromTexture(layers[layerIdx].texture);
-        
-        // then we get the raw data of that image, this fuction will also give us its size
-        int size;
-        c.layerData.emplace_back(ExportImageToMemory(img, ".bmp", &size));
-
-        // Save the amount of bytes in the layer
-        c.bytesPerlayer[layerIdx] = size;
-
-        UnloadImage(img);
+        // The process of getting the actual raw data of the image is up to the
+        // Files module 
+        c.layerData.emplace_back(LoadImageFromTexture(layers[layerIdx].texture));
     }
+    
+    // I just hope no one pases a 0 layers canvas...
+    c.layerSize = GetPixelDataSize(width, height, c.layerData[0].format);
+    c.props.format = c.layerData[0].format;
+    
     return c;
 }
 
 void Canvas::_setData(const CanvasData &c)
 {
-    width = c.width;
-    height = c.height;
-    canvasView = c.canvasView;
+    width = c.props.width;
+    height = c.props.height;
+    canvasView = c.props.canvasView;
     layerAmount = c.layerAmount;
 
     for(int layerIdx=0; layerIdx<layerAmount; ++layerIdx)
     {
         // We need to turn the image into a texture in order to draw it
-        Image img = LoadImageFromMemory(".bmp", c.layerData[layerIdx], c.bytesPerlayer[layerIdx]);
-        Texture tex = LoadTextureFromImage(img);
+        Texture tex = LoadTextureFromImage(c.layerData[layerIdx]);
 
         // Redo the layer
         UnloadRenderTexture(layers[layerIdx]);
@@ -111,10 +103,20 @@ void Canvas::_setData(const CanvasData &c)
         
         // ANd then we basically have to draw the layer into the texture
         BeginTextureMode(layers[layerIdx]);
-            DrawTexture(tex, 0, 0, RAYWHITE);
+            // NOTE: Render texture must be y-flipped due to default OpenGL coordinates (left-bottom)
+            DrawTextureRec(
+                tex, 
+                (Rectangle)
+                    {
+                        0,0, 
+                        (float)layers[0].texture.width, 
+                        (float)-layers[0].texture.height 
+                    }, 
+
+                (Vector2){0, 0}, 
+                WHITE
+            );
         EndTextureMode();
-        
-        UnloadImage(img);
         UnloadTexture(tex);
     }
 }
