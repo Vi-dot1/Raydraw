@@ -6,9 +6,6 @@
     *. Find a way to change between brushes seamlessly 
 
 
-(vvv This should be my main thing now vvv)
-
-*. Create a dedicated Import/Export module for Canvases
+*. Create a dedicated Import/Export module for Canvases { X }
     *. Add support on Canvas to be creates from images
-    *. Create a format that could allow saving and reloading of canvas data
-    *. 
+    *. Create a format that could allow saving and reloading of canvas data { X }
