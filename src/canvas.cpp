@@ -1,7 +1,8 @@
-#include "canvas.hpp"
-#include "raylib.h"
 #include <assert.h>
 #include <vector>
+
+#include "canvas.hpp"
+#include "raylib.h"
 
 Canvas::Canvas(int _width, int _height)
     : width(_width), height(_height)

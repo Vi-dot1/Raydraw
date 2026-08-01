@@ -1,11 +1,10 @@
-#include "Files.hpp"
-#include "canvas.hpp"
-#include "raylib.h"
 
-
-#include <cstddef>
 #include <filesystem>
 #include <fstream>
+
+#include "files.hpp"
+#include "canvas.hpp"
+#include "raylib.h"
 
 
 namespace fs = std::filesystem;

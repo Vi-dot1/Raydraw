@@ -1,4 +1,4 @@
-#include"Utils/mouseState.hpp"
+#include"State/mouse.hpp"
 #include"canvas.hpp"
 
 #include"tool.hpp"
