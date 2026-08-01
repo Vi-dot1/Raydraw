@@ -6,8 +6,17 @@
 Canvas::Canvas(int _width, int _height)
     : width(_width), height(_height)
 {
-    layers[0] = LoadRenderTexture(width, height);
+    _makeBlank();
+}
+Canvas::Canvas(const Vector2 &size)
+    : width(size.x), height(size.y)
+{
+    _makeBlank();
+}
 
+void Canvas::_makeBlank()
+{
+    layers[0] = LoadRenderTexture(width, height);
 
     // Position the camera a lil' bit to the left so the canvas and the panel don't overlap that much
     float camHOffset = -40;
@@ -23,10 +32,10 @@ Canvas::Canvas(int _width, int _height)
     EndTextureMode();
 }
 
-Canvas::Canvas(CanvasData& c) :
-    width(c.props.width), height(c.props.height), 
-    canvasView(c.props.canvasView), layerAmount(c.layerAmount)
+Canvas::Canvas(CanvasData& c)
 {
+    if(c.isNull()) _makeBlank();
+    else _setData(c);
 }
 
 Image Canvas::_exportImage()

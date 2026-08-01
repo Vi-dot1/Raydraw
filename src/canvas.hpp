@@ -41,11 +41,8 @@ struct CanvasData
         }
     }
     
-    // Empty constructor
     CanvasData(){}
 
-    // And due to the destructor above, let's not allow copying
-    // to avoid having invalid pointers
     CanvasData(const CanvasData&cData)
     {
         this->layerData = cData.layerData;
@@ -72,13 +69,13 @@ struct CanvasData
 };
 
 
-
 /* 
 Used to create and represent canvas objects.
 
 Features:
 - Canvas are formed by an array of `RenderTexture2D`, allowing multiple layers 
 - Canvas are rendered using a `Camera2D` space defined in `canvasView`, allowing to change the angle the canvas is seen
+- Ability to export/import a Canvas using a `CanvasData` object
 */
 class Canvas
 {
@@ -90,10 +87,13 @@ class Canvas
     int width, height;
     bool changed = false;
     
+    void _makeBlank();
+
 public:
     Camera2D canvasView;
 
     Canvas(int width, int height);
+    Canvas(const Vector2 &size);
     Canvas(CanvasData& c);
     ~Canvas();
 

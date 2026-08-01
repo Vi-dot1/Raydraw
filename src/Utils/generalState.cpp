@@ -8,13 +8,9 @@ namespace Program
 
 static pState programState;
 
-const pState& getProgramState() 
+const pState& getState() 
 {
     return programState;
-}
-const State& getState() 
-{
-    return programState.state;
 }
 
 static Tool* _currTool = nullptr;

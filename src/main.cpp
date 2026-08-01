@@ -15,12 +15,11 @@ extern "C"{
 
 #include"Files.hpp"
 
-constexpr int screenHeight = 600, screenWidth = 800;
 
 int main(int argc, char** argv)
 {
 	SetConfigFlags( FLAG_WINDOW_RESIZABLE );
-	InitWindow(screenWidth, screenHeight, "Raydraw");
+	InitWindow(Program::getState().windowSize.x, Program::getState().windowSize.y, "Raydraw");
 	HideCursor();
 	SetTargetFPS(120);
 
@@ -35,8 +34,9 @@ int main(int argc, char** argv)
 		)
 	);
 
+    // Temp
 	Brush b;
-	Canvas canvas(screenWidth, screenHeight);
+	Canvas canvas(Program::getState().windowSize);
  
     // Ok so I need cData to get dropped so I'll just make another scope
     {
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
     Program::setCurrentCanvas(&canvas);
 
 	Vector2 mpos;
-	while(!WindowShouldClose())
+	while( !WindowShouldClose() )
 	{
 		Mouse::updateState();
 		mpos = Mouse::getPos();
@@ -102,7 +102,6 @@ int main(int argc, char** argv)
 		if( !Mouse::wasAlreadyUsed() ) b._drawTo(canvas);
 		EndDrawing();
 	}
-    
     auto cData = canvas._getData();
     Files::saveAsRdraw("file.rdraw", cData);
 
