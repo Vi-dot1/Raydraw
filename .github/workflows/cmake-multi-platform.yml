@@ -7,6 +7,16 @@ on:
     branches: [ "master" ]
 
 jobs:
+  set-cmake:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        cmake-version: '4.x'
+    - name: Use cmake
+      run: cmake --version
+  
   build:
     runs-on: ${{ matrix.os }}
 
