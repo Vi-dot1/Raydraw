@@ -1,10 +1,7 @@
-extern "C"{
-    #include"raylib.h"
+#include"raylib.h"
 
-    #define RAYGUI_IMPLEMENTATION 1
-    #include"raygui.h"
-}
-
+#define RAYGUI_IMPLEMENTATION 1
+#include"raygui.h"
 #include "comps.hpp"
 
 using namespace Gui;

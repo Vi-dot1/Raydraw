@@ -1,8 +1,7 @@
 #pragma once
 
-#include "raylib.h"
-#include"gui.hpp"
 #include <string>
+#include "gui.hpp"
 
 namespace Gui {
 
@@ -18,6 +17,7 @@ public:
     void draw();
 };
 
+/*
 class ColorButton : public Gui::Component {
 public: 
     void draw();
@@ -42,5 +42,6 @@ class ColorPicker : public Gui::Component {
 public: 
     void draw();
 };
+*/
 
 }

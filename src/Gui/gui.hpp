@@ -1,57 +1,51 @@
 #pragma once
 
-#include "Utils/mouseState.hpp"
-#include "raymath.h"
-extern "C"{
-    #include"raylib.h"
-}
+#include <functional>
+#include <vector>
+
+#include"raylib.h"
 
 namespace Gui {
 
+// I just feel is going to be useful in the future
+// overengi... is just a struct come on
+struct Context {
+};
+
 struct Component {
-    float left, right, up, down;
+    float left=0.f, right=1.f, up=0.f, down=1.f;
     Rectangle bounds = {0,0,0,0};
     virtual void draw() = 0;
+    
+    std::function<void(const Context&)> callback;
 
     // Calculate space inside panel using anchors
     // called automatically for `panel`
     void updateRect(Rectangle& panelSpace) {
+
         bounds.x = (panelSpace.width*left) + panelSpace.x;
-        bounds.width = (panelSpace.width*right) + panelSpace.x;
         bounds.y = (panelSpace.height*up) + panelSpace.y;
-        bounds.height = (panelSpace.height*down) + panelSpace.y;
+
+        bounds.width = (panelSpace.width*(right-left));
+        bounds.height = (panelSpace.height*(down-up));
     }
 };
 
 class Panel {
     Rectangle space;
-    float marging=0.f;
 
+    // I dont like this cache wise
+    // but is just soo flexible
+    std::vector<Component*> comps;
 public:
     bool visible=true;
-    void appendComp(const Component& comp);
 
-    // Draw/process call for the main panel
     void draw(); 
-    // Recalculates panels size when window is resized
-    // Used to check whenever a point is inside the main panel area
-    bool IsMouseOver();
-    void updatePanel();
+    void appendComp(Component* comp);
 
-    // Translates a position with the Panel top-right corner as its origin
-    Vector2 translatePos(const Vector2& pos) {
-        return Vector2Add(
-            Vector2(space.x, space.y), 
-            pos
-        );
-    }
-    bool isMouseOver() {
-        return CheckCollisionPointRec(
-            Mouse::getMouseState().pos, 
-            space
-        );
-    }
+    // Updates screen space and recalculates 
+    // components's size when resized
+    void updatePanel(const Rectangle&);
 };
-
 
 }
