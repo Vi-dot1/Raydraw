@@ -1,4 +1,4 @@
-#include "Utils/generalState.hpp"
+#include "State/general.hpp"
 #include "Tools/tool.hpp"
 #include "canvas.hpp"
 

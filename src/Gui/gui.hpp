@@ -1,39 +1,51 @@
 #pragma once
 
-#include "Utils/mouseState.hpp"
-#include "raymath.h"
-extern "C"{
-    #include"raylib.h"
-}
+#include <functional>
+#include <vector>
+
+#include"raylib.h"
 
 namespace Gui {
 
-struct Component {
-    float x, y, w, h;
-
-    virtual void draw();
+// I just feel is going to be useful in the future
+// overengi... is just a struct come on
+struct Context {
 };
 
-struct Panel {
+struct Component {
+    float left=0.f, right=1.f, up=0.f, down=1.f;
+    Rectangle bounds = {0,0,0,0};
+    virtual void draw() = 0;
+    
+    std::function<void(const Context&)> callback;
+
+    // Calculate space inside panel using anchors
+    // called automatically for `panel`
+    void updateRect(Rectangle& panelSpace) {
+
+        bounds.x = (panelSpace.width*left) + panelSpace.x;
+        bounds.y = (panelSpace.height*up) + panelSpace.y;
+
+        bounds.width = (panelSpace.width*(right-left));
+        bounds.height = (panelSpace.height*(down-up));
+    }
+};
+
+class Panel {
     Rectangle space;
-    float marging=0.f;
+
+    // I dont like this cache wise
+    // but is just soo flexible
+    std::vector<Component*> comps;
+public:
     bool visible=true;
 
-    // Translates a position with the Panel top-right corner as its origin
-    Vector2 translatePos(const Vector2& pos) {
-        return Vector2Add(Vector2(space.x, space.y), pos);
-    }
-    bool isMouseOver() {
-        return CheckCollisionPointRec(Mouse::getMouseState().pos, space);
-    }
+    void draw(); 
+    void appendComp(Component* comp);
+
+    // Updates screen space and recalculates 
+    // components's size when resized
+    void updatePanel(const Rectangle&);
 };
-
-// Draw/process call for the main panel
-void draw(); 
-
-// Recalculates panels size when window is resized
-// Used to check whenever a point is inside the main panel area
-bool IsMouseOverPanel();
-void updatePanel();
 
 }

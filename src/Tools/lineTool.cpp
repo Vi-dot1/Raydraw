@@ -1,6 +1,6 @@
 #include "raylib.h"
 
-#include "Utils/mouseState.hpp"
+#include "State/mouse.hpp"
 
 #include "canvas.hpp"
 #include "lineTool.hpp"

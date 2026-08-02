@@ -1,30 +1,26 @@
+#include "Gui/gui.hpp"
 #include <iostream>
 extern "C"{
     #include "raylib.h"
 }
 #include "raymath.h"
 
-
-#include "canvas.hpp"
-#include "Gui/gui.hpp"
-
 #include "Tools/brush.hpp"
 
-#include "Utils/mouseState.hpp"
-#include "Utils/generalState.hpp"
+#include "State/mouse.hpp"
+#include "State/general.hpp"
 
-#include"Files.hpp"
+#include "Gui/comps.hpp"
 
+#include "canvas.hpp"
+#include "files.hpp"
 
 int main(int argc, char** argv)
 {
 	SetConfigFlags( FLAG_WINDOW_RESIZABLE );
 	InitWindow(Program::getState().windowSize.x, Program::getState().windowSize.y, "Raydraw");
-	HideCursor();
+	//HideCursor();
 	SetTargetFPS(120);
-
-	// Initialize Panel Size
-	Gui::updatePanel();
 
 	// Background is literally just an Image generated using raylibs default gen algorithms
 	Texture2D editorBackground = LoadTextureFromImage(
@@ -33,7 +29,7 @@ int main(int argc, char** argv)
 			6, 6, GRAY, DARKGRAY
 		)
 	);
-
+    
     // Temp
 	Brush b;
 	Canvas canvas(Program::getState().windowSize);
@@ -46,7 +42,6 @@ int main(int argc, char** argv)
             canvas._setData(cData);
         }
     }
-
     Program::setCurrentCanvas(&canvas);
 
 	Vector2 mpos;
@@ -55,17 +50,6 @@ int main(int argc, char** argv)
 		Mouse::updateState();
 		mpos = Mouse::getPos();
 
-		if( IsWindowResized() )
-		{
-			Gui::updatePanel();
-			editorBackground = LoadTextureFromImage(
-				GenImageChecked(
-					GetScreenWidth(), GetScreenWidth(), 
-					6, 6, GRAY, DARKGRAY
-				)
-			);
-		}
-        
         Mouse::setState(Mouse::State::draw);
 		if(  IsKeyDown(KEY_LEFT_CONTROL) and Program::getCurrentCanvas() )
 		{
@@ -76,8 +60,13 @@ int main(int argc, char** argv)
             {
 				Program::getCurrentCanvas()->canvasView.target = Vector2Subtract(canvas.canvasView.target, GetMouseDelta());
             }
+
             // Handle Zoom
-			Program::getCurrentCanvas()->canvasView.zoom += GetMouseWheelMove()*0.05;
+            float zoom = (
+             GetMouseWheelMove()*0.05 +
+             Program::getCurrentCanvas()->canvasView.zoom
+            );
+            if( zoom >= 0 ) Program::getCurrentCanvas()->canvasView.zoom = zoom;
 
 			// TO avoid drawing while dragging 
 			Mouse::markUsed();
@@ -98,10 +87,10 @@ int main(int argc, char** argv)
             Program::getCurrentCanvas()->_draw();
         }
 
-		Gui::draw();
 		if( !Mouse::wasAlreadyUsed() ) b._drawTo(canvas);
 		EndDrawing();
-	}
+	} // Main loop end
+
     auto cData = canvas._getData();
     Files::saveAsRdraw("file.rdraw", cData);
 
