@@ -6,10 +6,10 @@
 
 void Brush::_drawTo(Canvas& canvas)
 {
-    const Mouse::mState& state = Mouse::getMouseState();
+    const Mouse::mState& mouse = Mouse::getState();
 
     RenderTexture2D& target = canvas.getCurrentLayer();
-    Vector2 pos = canvas.localCoord(state.pos);
+    Vector2 pos = canvas.localCoord(mouse.pos);
 
 	BeginTextureMode(target);
 
@@ -25,5 +25,5 @@ void Brush::_drawTo(Canvas& canvas)
     EndTextureMode();
 
     lastPos = pos;
-    stillDrawing = IsMouseButtonDown( MOUSE_BUTTON_LEFT );
+    stillDrawing = (mouse.state == Mouse::State::HOLD);
 }

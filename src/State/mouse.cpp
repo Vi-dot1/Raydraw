@@ -8,7 +8,7 @@ namespace Mouse
 // vvv This is the object the state of the mouse is written into (Am I writing too many comments?)
 static mState mouseState;
 
-const mState& getMouseState()
+const mState& getState()
 {
     return mouseState;
 }
@@ -16,42 +16,33 @@ const mState& getMouseState()
 void updateState()
 {
     mouseState.pos = GetMousePosition();
+    mouseState.delta = GetMouseDelta();
 
-    mouseState.wasHolding = mouseState.IsHolding;
-    mouseState.IsHolding = IsMouseButtonDown(MOUSE_LEFT_BUTTON);
-
-    // To check if we consumed an input click, we check if we complete
-    mouseState.inputConsumed = mouseState.wasHolding && !mouseState.IsHolding;
+    if( IsMouseButtonDown(MOUSE_LEFT_BUTTON) )
+    {
+        if( mouseState.state == State::CLICK )
+        {
+            mouseState.state = State::HOLD;
+        }
+        else
+        {
+            mouseState.state = State::CLICK;
+        }
+    }
+    else mouseState.state = State::NORMAL;
 }
 
-const State& getState()
-{
-    return mouseState.state;
-}
 void setState(State&& state)
 {
     mouseState.state = state;
 }
-
 void markUsed()
 {
-    mouseState.inputConsumed = true;
+    mouseState.state = State::NORMAL;
 }
-bool wasAlreadyUsed()
-{
-    return mouseState.inputConsumed;
-}
-
 const Vector2& getPos()
 {
     return mouseState.pos;
 }
-
-// I'll maybe use them later?
-void setPos(const Vector2& pos)
-{
-    mouseState.pos = pos;
-}
-
 }
 

@@ -1,5 +1,3 @@
-#include "Gui/gui.hpp"
-#include <iostream>
 extern "C"{
     #include "raylib.h"
 }
@@ -9,8 +7,6 @@ extern "C"{
 
 #include "State/mouse.hpp"
 #include "State/general.hpp"
-
-#include "Gui/comps.hpp"
 
 #include "canvas.hpp"
 #include "files.hpp"
@@ -38,7 +34,6 @@ int main(int argc, char** argv)
     {
         CanvasData cData = Files::loadRdrawFile("file.rdraw");
         if( !cData.isNull() ) {
-            std::cout<<"File loaded"<<std::endl;
             canvas._setData(cData);
         }
     }
@@ -47,14 +42,26 @@ int main(int argc, char** argv)
 	Vector2 mpos;
 	while( !WindowShouldClose() )
 	{
+        Program::updateState();
 		Mouse::updateState();
-		mpos = Mouse::getPos();
+        
+        auto general = Program::getState();
+        auto mouse = Mouse::getState();
 
-        Mouse::setState(Mouse::State::draw);
+		mpos = Mouse::getPos();
+		if( general.resized )
+		{
+            // Update background 
+			editorBackground = LoadTextureFromImage(
+				GenImageChecked(
+					GetScreenWidth(), GetScreenWidth(), 
+					6, 6, GRAY, DARKGRAY
+				)
+			);
+		}
+
 		if(  IsKeyDown(KEY_LEFT_CONTROL) and Program::getCurrentCanvas() )
 		{
-			Mouse::setState(Mouse::State::hold);
-
             // Handle Dragging
 			if ( IsMouseButtonDown(MOUSE_BUTTON_LEFT) )
             {
@@ -63,8 +70,8 @@ int main(int argc, char** argv)
 
             // Handle Zoom
             float zoom = (
-             GetMouseWheelMove()*0.05 +
-             Program::getCurrentCanvas()->canvasView.zoom
+                GetMouseWheelMove()*0.05 +
+                Program::getCurrentCanvas()->canvasView.zoom
             );
             if( zoom >= 0 ) Program::getCurrentCanvas()->canvasView.zoom = zoom;
 
@@ -72,22 +79,19 @@ int main(int argc, char** argv)
 			Mouse::markUsed();
 		}
         
-        if(IsKeyDown(KEY_LEFT_SHIFT) && IsKeyPressed(KEY_S))
+        if( IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_S) )
         {
             Files::saveCanvasAsPng("image.png", *Program::getCurrentCanvas());
-            std::cout<<"Image saved!"<<std::endl;
         }
         
         // Redering
 		BeginDrawing();
 		DrawTexture(editorBackground, 0, 0, RAYWHITE);
-
         if( Program::getCurrentCanvas() ) 
         {
             Program::getCurrentCanvas()->_draw();
         }
-
-		if( !Mouse::wasAlreadyUsed() ) b._drawTo(canvas);
+		if( mouse.state == Mouse::State::CLICK ) b._drawTo(canvas);
 		EndDrawing();
 	} // Main loop end
 

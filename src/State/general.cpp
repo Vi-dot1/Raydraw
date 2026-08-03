@@ -1,6 +1,7 @@
 #include "State/general.hpp"
 #include "Tools/tool.hpp"
 #include "canvas.hpp"
+#include "raylib.h"
 
 
 namespace Program 
@@ -11,6 +12,11 @@ static pState programState;
 const pState& getState() 
 {
     return programState;
+}
+
+void updateState()
+{
+    programState.resized = IsWindowResized();
 }
 
 static Tool* _currTool = nullptr;

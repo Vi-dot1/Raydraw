@@ -6,50 +6,35 @@
 namespace Mouse
 {
 
-enum class State { draw, hold, normal };
+enum class State { CLICK, HOLD, NORMAL };
 
 /*
-Struct used to hold mouses state, not intended to be created directly.
-
-A reference to the current mouse state can be obtained using the `getMouseState()` function.
+    Struct used to hold mouses state
 */
 struct mState
 {
-    State state = State::draw;
-
-    Vector2 pos;
-    bool inputConsumed = false;
-
-    bool IsHolding = false;
-    bool wasHolding = false;
+    State state = State::NORMAL;
+    Vector2 pos = Vector2(0, 0);
+    Vector2 delta = Vector2(0, 0);
 };
 
 /*
-Returns a constant reference to the used `Mouse::State` object containing relevant mouse data.
-
-Modifying the state of the mouse must be done using the provided functions.
+    Returns a constant reference to the used `Mouse::State` object containing relevant mouse data.
 */
-const mState& getMouseState();
+const mState& getState();
 
 /*
-Fetches and saves current mouse position along with the current input state,
-also an enum `ProgramState` representing the current program state of the mouse.
+    Fetches and saves current mouse position along with the current input state,
+    also an enum `ProgramState` representing the current program state of the mouse.
 
-Must be called on the main at the start of each frame.
+    Must be called at the start of each frame.
 */
 void updateState();
-
-const State& getState();
-void setState(State&& state);
-
 const Vector2& getPos();
 
 /*
-Updates the `inputConsumed` field on the `Mouse::State` object, 
-used to tell any other component processed after that it cannot use the mouse.
+    Updates the `inputConsumed` field on the `Mouse::State` object, 
+    used to tell any other component processed after that it cannot use the mouse.
 */
 void markUsed();
-
-
-bool wasAlreadyUsed();
 }
