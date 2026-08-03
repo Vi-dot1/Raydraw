@@ -15,6 +15,8 @@ const mState& getState()
 
 void updateState()
 {
+    mouseState.inputConsumed = false;
+    mouseState.lastPos = mouseState.pos;
     mouseState.pos = GetMousePosition();
     mouseState.delta = GetMouseDelta();
 
@@ -38,7 +40,7 @@ void setState(State&& state)
 }
 void markUsed()
 {
-    mouseState.state = State::NORMAL;
+    mouseState.inputConsumed = true;
 }
 const Vector2& getPos()
 {

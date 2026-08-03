@@ -31,12 +31,14 @@ int main(int argc, char** argv)
 	Canvas canvas(Program::getState().windowSize);
  
     // Ok so I need cData to get dropped so I'll just make another scope
+    /*
     {
         CanvasData cData = Files::loadRdrawFile("file.rdraw");
         if( !cData.isNull() ) {
             canvas._setData(cData);
         }
     }
+    */
     Program::setCurrentCanvas(&canvas);
 
 	Vector2 mpos;
@@ -87,11 +89,12 @@ int main(int argc, char** argv)
         // Redering
 		BeginDrawing();
 		DrawTexture(editorBackground, 0, 0, RAYWHITE);
+
+		if( !mouse.inputConsumed ) b._drawTo(canvas);
         if( Program::getCurrentCanvas() ) 
         {
             Program::getCurrentCanvas()->_draw();
         }
-		if( mouse.state == Mouse::State::CLICK ) b._drawTo(canvas);
 		EndDrawing();
 	} // Main loop end
 

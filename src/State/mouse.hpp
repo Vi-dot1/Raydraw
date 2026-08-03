@@ -14,8 +14,12 @@ enum class State { CLICK, HOLD, NORMAL };
 struct mState
 {
     State state = State::NORMAL;
+
     Vector2 pos = Vector2(0, 0);
+    Vector2 lastPos = Vector2(0, 0);
     Vector2 delta = Vector2(0, 0);
+    
+    bool inputConsumed=false;
 };
 
 /*
