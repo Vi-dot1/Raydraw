@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 	SetConfigFlags( FLAG_WINDOW_RESIZABLE );
 	InitWindow(Program::getState().windowSize.x, Program::getState().windowSize.y, "Raydraw");
 	//HideCursor();
-	SetTargetFPS(120);
+	SetTargetFPS(60);
 
 	// Background is literally just an Image generated using raylibs default gen algorithms
 	Texture2D editorBackground = LoadTextureFromImage(
