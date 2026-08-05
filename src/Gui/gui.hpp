@@ -9,15 +9,13 @@ namespace Gui {
 
 // I just feel is going to be useful in the future
 // overengi... is just a struct come on
-struct Context {
-};
 
 struct Component {
     float left=0.f, right=1.f, up=0.f, down=1.f;
     Rectangle bounds = {0,0,0,0};
     virtual void draw() = 0;
     
-    std::function<void(const Context&)> callback;
+    std::function<void(Component&)> callback = [](Component& c){};
 
     // Calculate space inside panel using anchors
     // called automatically for `panel`

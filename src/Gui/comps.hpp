@@ -2,6 +2,7 @@
 
 #include <string>
 #include "gui.hpp"
+#include "raylib.h"
 
 namespace Gui {
 
@@ -17,12 +18,13 @@ public:
     void draw();
 };
 
-/*
 class ColorButton : public Gui::Component {
 public: 
+    Color color;
     void draw();
 };
 
+/*
 class ImageButton : public Gui::Component {
 public: 
     void draw();
