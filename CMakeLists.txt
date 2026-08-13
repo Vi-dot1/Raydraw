@@ -8,13 +8,15 @@ set(CMAKE_CXX_STANDART_REQUIRED)
 
 # Project
 add_executable(${PROJECT_NAME})
-add_subdirectory(src)
-include_directories(src)
+
 add_subdirectory(thirdparty)
+include_directories(src)
+add_subdirectory(src)
 
 # Libraries
 target_link_libraries(${PROJECT_NAME} raylib)
 target_link_libraries(${PROJECT_NAME} raygui)
+
 
 # And down here some stuff I copied from a cmake example
 
