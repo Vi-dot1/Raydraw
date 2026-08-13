@@ -9,7 +9,7 @@
 */
 
 #include "Tools/tool.hpp"
-#include "canvas.hpp"
+#include "Tools/canvas.hpp"
 #include "raylib.h"
 
 namespace Program {
@@ -25,7 +25,6 @@ struct pState
 void updateState();
 
 const pState& getState();
-
 
 const Tool* getCurrentTool();
 void setCurrentTool(Tool* t);

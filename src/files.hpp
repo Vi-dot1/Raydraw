@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "canvas.hpp"
+#include "Tools/canvas.hpp"
 
 namespace Files
 {

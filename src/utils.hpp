@@ -7,7 +7,7 @@
 inline bool isMouseOver(const Rectangle& space)
 {
     return CheckCollisionPointRec(
-        Mouse::getMouseState().pos, 
+        Mouse::getState().pos, 
         space
     );
 }

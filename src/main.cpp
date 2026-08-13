@@ -10,7 +10,7 @@ extern "C"{
 #include "State/mouse.hpp"
 #include "State/general.hpp"
 
-#include "canvas.hpp"
+#include "Tools/canvas.hpp"
 #include "files.hpp"
 
 int main(int argc, char** argv)

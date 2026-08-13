@@ -1,7 +1,8 @@
+#include "raylib.h"
+
 #include "State/general.hpp"
 #include "Tools/tool.hpp"
-#include "canvas.hpp"
-#include "raylib.h"
+#include "Tools/canvas.hpp"
 
 
 namespace Program 
