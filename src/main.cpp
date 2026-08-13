@@ -1,3 +1,5 @@
+#include "Gui/comps.hpp"
+#include "Gui/gui.hpp"
 extern "C"{
     #include "raylib.h"
 }
@@ -41,14 +43,22 @@ int main(int argc, char** argv)
     */
     Program::setCurrentCanvas(&canvas);
 
+    Texture2D img = LoadTextureFromImage(
+        GenImageCellular(100, 100, 9)
+    );
+    Gui::ImageButton imgB;
+    imgB.src = img;
+    
+    Gui::ColorPicker c;
+    
 	Vector2 mpos;
 	while( !WindowShouldClose() )
 	{
         Program::updateState();
 		Mouse::updateState();
         
-        auto general = Program::getState();
-        auto mouse = Mouse::getState();
+        auto& general = Program::getState();
+        auto& mouse = Mouse::getState();
 
 		mpos = Mouse::getPos();
 		if( general.resized )
@@ -86,15 +96,20 @@ int main(int argc, char** argv)
             Files::saveCanvasAsPng("image.png", *Program::getCurrentCanvas());
         }
         
+        
         // Redering
 		BeginDrawing();
 		DrawTexture(editorBackground, 0, 0, RAYWHITE);
 
-		if( !mouse.inputConsumed ) b._drawTo(canvas);
+		if( !mouse.inputConsumed ) 
+        {
+            b._drawTo(canvas);
+        }
         if( Program::getCurrentCanvas() ) 
         {
             Program::getCurrentCanvas()->_draw();
         }
+
 		EndDrawing();
 	} // Main loop end
 
@@ -103,5 +118,6 @@ int main(int argc, char** argv)
 
 	CloseWindow();
 	UnloadTexture(editorBackground);
+    UnloadTexture(img);
 	return 0;
 }

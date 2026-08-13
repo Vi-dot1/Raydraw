@@ -24,12 +24,20 @@ public:
     void draw();
 };
 
-/*
 class ImageButton : public Gui::Component {
 public: 
+    Texture2D src;
     void draw();
 };
 
+class ColorPicker : public Gui::Component {
+public: 
+    void draw();
+    
+    Color color = RAYWHITE;
+};
+
+/*
 class HSlider : public Gui::Component {
 public: 
     void draw();
@@ -40,10 +48,6 @@ public:
     void draw();
 };
 
-class ColorPicker : public Gui::Component {
-public: 
-    void draw();
-};
 */
 
 }
