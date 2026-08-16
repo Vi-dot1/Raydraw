@@ -29,7 +29,7 @@ struct CanvasData
     size_t layerSize = 0; 
     std::vector<Image> layerData;
     
-    // Just in case...
+    CanvasData() {};
     ~CanvasData()
     {
         for( auto layer : layerData )
@@ -38,29 +38,24 @@ struct CanvasData
         }
     }
     
-    CanvasData(){}
+    CanvasData(const CanvasData&) = delete;
+    CanvasData operator=(const CanvasData&) = delete;
 
-    CanvasData(const CanvasData&cData)
-    {
-        this->layerData = cData.layerData;
-        this->layerAmount = cData.layerAmount;
-        this->layerSize = cData.layerSize;
-        this->props = cData.props;
-    }
     CanvasData(CanvasData &&cData)
     {
-        this->layerData = std::move(cData.layerData);
         // To avoid the destructor from unloading the images
+        this->layerData = std::move(cData.layerData);
         cData.layerData.clear();
 
-        // This are all just primitives, copy is fine
+        // This are all primitives, copy is fine
         this->layerAmount = cData.layerAmount;
         this->layerSize = cData.layerSize;
         this->props = cData.props;
     }
 
     
-    bool isNull(){
+    // IDEA: Maybe improve this check?
+    bool isNull() {
         return layerAmount == 0;
     }
 };

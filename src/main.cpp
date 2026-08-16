@@ -1,5 +1,4 @@
 #include "Gui/comps.hpp"
-#include "Gui/gui.hpp"
 extern "C"{
     #include "raylib.h"
 }
@@ -11,13 +10,14 @@ extern "C"{
 #include "State/general.hpp"
 
 #include "Tools/canvas.hpp"
-#include "files.hpp"
+#include "Files/canvas.hpp"
+
+#include "Files/tinyfiledialogs.hpp"
 
 int main(int argc, char** argv)
 {
 	SetConfigFlags( FLAG_WINDOW_RESIZABLE );
 	InitWindow(Program::getState().windowSize.x, Program::getState().windowSize.y, "Raydraw");
-	//HideCursor();
 	SetTargetFPS(60);
 
 	// Background is literally just an Image generated using raylibs default gen algorithms

@@ -29,7 +29,7 @@ void Canvas::_makeBlank()
 
     // First layer
     BeginTextureMode(layers[0]);
-    ClearBackground(RAYWHITE);
+    ClearBackground({0,0,0,0});
     EndTextureMode();
 }
 

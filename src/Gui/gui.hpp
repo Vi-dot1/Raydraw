@@ -19,7 +19,7 @@ struct Component {
 
     // Calculate space inside panel using anchors
     // called automatically for `panel`
-    void updateRect(Rectangle& panelSpace) {
+    virtual void updateRect(const Rectangle& panelSpace) {
 
         bounds.x = (panelSpace.width*left) + panelSpace.x;
         bounds.y = (panelSpace.height*up) + panelSpace.y;
@@ -29,8 +29,7 @@ struct Component {
     }
 };
 
-class Panel {
-    Rectangle space;
+class Panel : public Component {
 
     // I dont like this cache wise
     // but is just soo flexible
@@ -39,11 +38,11 @@ public:
     bool visible=true;
 
     void draw(); 
+    void updateRect(const Rectangle& panelSpace);
     void appendComp(Component* comp);
 
     // Updates screen space and recalculates 
     // components's size when resized
-    void updatePanel(const Rectangle&);
 };
 
 }

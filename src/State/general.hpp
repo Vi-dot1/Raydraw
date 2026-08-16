@@ -19,7 +19,7 @@ constexpr int defScreenHeight = 600, defScreenWidth = 800;
 
 struct pState
 {
-    Vector2 windowSize = Vector2(defScreenWidth, defScreenHeight);
+    Vector2 windowSize = Vector2{defScreenWidth, defScreenHeight};
     bool resized=false;
 };
 void updateState();

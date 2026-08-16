@@ -6,12 +6,12 @@ extern "C"{
 namespace Gui
 {
 
-void Panel::updatePanel(const Rectangle& rect)
+void Panel::updateRect(const Rectangle& rect)
 {
-    space = rect;
+    bounds = rect;
     for(Component* comp : comps)
     {
-        comp->updateRect(space);
+        comp->updateRect(bounds);
     }
 }
 void Panel::draw()
@@ -25,7 +25,7 @@ void Panel::draw()
 void Panel::appendComp(Component* comp)
 {
     comps.emplace_back(comp);
-    comps.back()->updateRect(space);
+    comps.back()->updateRect(bounds);
 }
 
 }
