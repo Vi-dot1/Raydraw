@@ -2,12 +2,12 @@
 A small paint like drawing program made entirely in C++ using only Raylib (and RayGui for User Interface in the future). The point of RayDraw is to be simple to use, with everything being bundled as a single binary with no extra dependencies attached.
 
 # Compiling
-Once cloned the project is required to populate the submodules in git:
+Once cloned the project is required to populate the git submodules:
 ```bash
 git submodule update --init --recursive
 ```
 
-After dependencies are fetch it can be compiled using only `cmake` as long as you have a C++ compiler installed:
+After dependencies are fetch it can be build with `cmake`:
 ```bash
 mkdir build
 cd build
