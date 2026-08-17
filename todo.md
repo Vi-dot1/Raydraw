@@ -1,8 +1,10 @@
 ## UI
 
-- [X] Design UI mock up
+- [X] Design UI mock up (Dont even know if I'll use it anymore)
 - [X] Create UI module
 
+- [ ] Write save/load action flows
+- [ ] Add more option to panel
 
 ## Program Tools
 
