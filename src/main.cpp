@@ -1,3 +1,4 @@
+#include "Files/fileExplorer.hpp"
 #include "Gui/comps.hpp"
 #include "Gui/gui.hpp"
 #include "Tools/tool.hpp"
@@ -49,7 +50,6 @@ int main(int argc, char** argv)
 	{
         Program::updateState();
 		Mouse::updateState();
-        
         auto& general = Program::getState();
         auto& mouse = Mouse::getState();
 
@@ -63,7 +63,6 @@ int main(int argc, char** argv)
 				)
 			);
 		}
-
         Tool::color = c.color;
 
 		if(  IsKeyDown(KEY_LEFT_CONTROL) and Program::getCurrentCanvas() )
@@ -87,7 +86,9 @@ int main(int argc, char** argv)
         
         if( IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_S) )
         {
-            Files::saveCanvasAsPng("image.png", *Program::getCurrentCanvas());
+            std::string s = File::openFileSelect("Save file as...", {".png"}, true);
+            Files::saveCanvasAsPng(s, *Program::getCurrentCanvas());
+            File::popUpInfo("File saved", s, File::popUp::INFO);
         }
         
         bool canDraw = !(mouse.inputConsumed || CheckCollisionPointRec(mouse.pos, panel.bounds));

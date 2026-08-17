@@ -3,7 +3,8 @@
 extern "C"{
     #include "raylib.h"
 }
-#include "canvas.hpp"
+#include "./canvas.hpp"
+
 
 // A general interface that everything that want to draw into a canvas must use
 class Tool

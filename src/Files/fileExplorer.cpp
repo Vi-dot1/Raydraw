@@ -3,6 +3,7 @@
 #include "tinyfiledialogs.hpp"
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace File {
 
@@ -26,12 +27,30 @@ const char* getTypeStr(const popUp& type)
     return "";
 }
 
-std::string openFileSelect(const std::string& ext, bool save)
+std::string openFileSelect(const std::string& tittle, const std::vector<const char*>& ext, bool save)
 {
     std::string path;
     
     if( save )
     {
+        path = tinyfd_saveFileDialog(
+            tittle.c_str(), 
+            "./", 
+            ext.size(), 
+            ext.data(), 
+            nullptr
+        );
+    }
+    else
+    {
+        path = tinyfd_openFileDialog(
+            tittle.c_str(), 
+            "./", 
+            ext.size(), 
+            ext.data(),
+            nullptr,
+            0
+        );
     }
     
     return std::move(path);

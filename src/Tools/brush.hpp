@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tool.hpp"
+#include "./tool.hpp"
 
 class Brush : public Tool
 {
