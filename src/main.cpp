@@ -87,8 +87,11 @@ int main(int argc, char** argv)
         if( IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_S) )
         {
             std::string s = File::openFileSelect("Save file as...", {".png"}, true);
-            Files::saveCanvasAsPng(s, *Program::getCurrentCanvas());
-            File::popUpInfo("File saved", s, File::popUp::INFO);
+
+            if( Files::saveCanvasAsPng(s, *Program::getCurrentCanvas()) )
+            {
+                File::popUpInfo("File saved", s, File::popUp::INFO);
+            }
         }
         
         bool canDraw = !(mouse.inputConsumed || CheckCollisionPointRec(mouse.pos, panel.bounds));

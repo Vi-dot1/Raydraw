@@ -58,7 +58,23 @@ Image Canvas::_exportImage()
     }
 
     BeginTextureMode(r);
-    this->_draw();
+    for(size_t i=0; i<layerAmount; ++i)
+    {
+		// NOTE: The y-flip aplied in rendering will actually flip the image when exporting into file,
+        // so here we need to avoid it
+        DrawTextureRec(
+            layers[i].texture, 
+            (Rectangle)
+                {
+                    0,0, 
+                    (float)layers[0].texture.width, 
+                    (float)layers[0].texture.height 
+                }, 
+
+            (Vector2){0, 0}, 
+            WHITE
+        );
+    }
     EndTextureMode();
     
     // Loading back the current canvas view settings
