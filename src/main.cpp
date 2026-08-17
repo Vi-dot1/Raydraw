@@ -1,4 +1,6 @@
 #include "Gui/comps.hpp"
+#include "Gui/gui.hpp"
+#include "Tools/tool.hpp"
 extern "C"{
     #include "raylib.h"
 }
@@ -11,8 +13,6 @@ extern "C"{
 
 #include "Tools/canvas.hpp"
 #include "Files/canvas.hpp"
-
-#include "Files/tinyfiledialogs.hpp"
 
 int main(int argc, char** argv)
 {
@@ -31,16 +31,6 @@ int main(int argc, char** argv)
     // Temp
 	Brush b;
 	Canvas canvas(Program::getState().windowSize);
- 
-    // Ok so I need cData to get dropped so I'll just make another scope
-    /*
-    {
-        CanvasData cData = Files::loadRdrawFile("file.rdraw");
-        if( !cData.isNull() ) {
-            canvas._setData(cData);
-        }
-    }
-    */
     Program::setCurrentCanvas(&canvas);
 
     Texture2D img = LoadTextureFromImage(
@@ -49,9 +39,12 @@ int main(int argc, char** argv)
     Gui::ImageButton imgB;
     imgB.src = img;
     
+    Gui::Panel panel;
+    panel.updateRect({10, 10, 150, 150});
     Gui::ColorPicker c;
+    panel.appendComp(&c);
+
     
-	Vector2 mpos;
 	while( !WindowShouldClose() )
 	{
         Program::updateState();
@@ -60,7 +53,6 @@ int main(int argc, char** argv)
         auto& general = Program::getState();
         auto& mouse = Mouse::getState();
 
-		mpos = Mouse::getPos();
 		if( general.resized )
 		{
             // Update background 
@@ -71,6 +63,8 @@ int main(int argc, char** argv)
 				)
 			);
 		}
+
+        Tool::color = c.color;
 
 		if(  IsKeyDown(KEY_LEFT_CONTROL) and Program::getCurrentCanvas() )
 		{
@@ -96,25 +90,25 @@ int main(int argc, char** argv)
             Files::saveCanvasAsPng("image.png", *Program::getCurrentCanvas());
         }
         
-        
+        bool canDraw = !(mouse.inputConsumed || CheckCollisionPointRec(mouse.pos, panel.bounds));
+		if( canDraw ) 
+        {
+            b._drawTo(canvas);
+        }
         // Redering
 		BeginDrawing();
 		DrawTexture(editorBackground, 0, 0, RAYWHITE);
 
-		if( !mouse.inputConsumed ) 
-        {
-            b._drawTo(canvas);
-        }
         if( Program::getCurrentCanvas() ) 
         {
             Program::getCurrentCanvas()->_draw();
         }
+        panel.draw();
 
 		EndDrawing();
 	} // Main loop end
 
     auto cData = canvas._getData();
-    Files::saveAsRdraw("file.rdraw", cData);
 
 	CloseWindow();
 	UnloadTexture(editorBackground);
