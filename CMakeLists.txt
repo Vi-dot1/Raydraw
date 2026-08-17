@@ -19,6 +19,9 @@ target_link_libraries(${PROJECT_NAME} raylib)
 target_link_libraries(${PROJECT_NAME} raygui)
 
 #set(raylib_VERBOSE 1)
+set_target_properties( ${PROJECT_NAME} PROPERTIES  
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out
+)
 
 # Web Configurations
 if (${PLATFORM} STREQUAL "Web")
