@@ -1,8 +1,5 @@
 #pragma once
 
-#include <algorithm>
-#include<cstddef>
-#include <memory>
 #include <vector>
 
 extern "C"{
@@ -32,7 +29,7 @@ struct CanvasData
     size_t layerSize = 0; 
     std::vector<Image> layerData;
     
-    // Just in case...
+    CanvasData() {};
     ~CanvasData()
     {
         for( auto layer : layerData )
@@ -41,36 +38,27 @@ struct CanvasData
         }
     }
     
-    // Empty constructor
-    CanvasData(){}
+    CanvasData(const CanvasData&) = delete;
+    CanvasData operator=(const CanvasData&) = delete;
 
-    // And due to the destructor above, let's not allow copying
-    // to avoid having invalid pointers
-    CanvasData(const CanvasData&cData)
-    {
-        this->layerData = cData.layerData;
-        this->layerAmount = cData.layerAmount;
-        this->layerSize = cData.layerSize;
-        this->props = cData.props;
-    }
     CanvasData(CanvasData &&cData)
     {
-        this->layerData = std::move(cData.layerData);
         // To avoid the destructor from unloading the images
+        this->layerData = std::move(cData.layerData);
         cData.layerData.clear();
 
-        // This are all just primitives, copy is fine
+        // This are all primitives, copy is fine
         this->layerAmount = cData.layerAmount;
         this->layerSize = cData.layerSize;
         this->props = cData.props;
     }
 
     
-    bool isNull(){
+    // IDEA: Maybe improve this check?
+    bool isNull() {
         return layerAmount == 0;
     }
 };
-
 
 
 /* 
@@ -79,6 +67,7 @@ Used to create and represent canvas objects.
 Features:
 - Canvas are formed by an array of `RenderTexture2D`, allowing multiple layers 
 - Canvas are rendered using a `Camera2D` space defined in `canvasView`, allowing to change the angle the canvas is seen
+- Ability to export/import a Canvas using a `CanvasData` object
 */
 class Canvas
 {
@@ -90,10 +79,13 @@ class Canvas
     int width, height;
     bool changed = false;
     
+    void _makeBlank();
+
 public:
     Camera2D canvasView;
 
     Canvas(int width, int height);
+    Canvas(const Vector2 &size);
     Canvas(CanvasData& c);
     ~Canvas();
 

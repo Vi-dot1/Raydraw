@@ -1,0 +1,27 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Desktop-Linux",
+            "binaryDir": "build/${presetName}",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "PLATFORM": "Desktop",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "wasm",
+            "displayName": "Emscripten",
+            "binaryDir": "build/${presetName}",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "PLATFORM": "Web",
+                "CMAKE_C_COMPILER": "emcc",
+                "CMAKE_CXX_COMPILER": "em++"
+            }
+        }
+    ]
+}

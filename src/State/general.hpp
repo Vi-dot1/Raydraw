@@ -9,19 +9,22 @@
 */
 
 #include "Tools/tool.hpp"
-#include "canvas.hpp"
+#include "Tools/canvas.hpp"
+#include "raylib.h"
 
 namespace Program {
 
 enum class State {DEFAULT};
+constexpr int defScreenHeight = 600, defScreenWidth = 800;
 
 struct pState
 {
-    State state = State::DEFAULT;
+    Vector2 windowSize = Vector2{defScreenWidth, defScreenHeight};
+    bool resized=false;
 };
+void updateState();
 
-const pState& getProgramState();
-const State& getState();
+const pState& getState();
 
 const Tool* getCurrentTool();
 void setCurrentTool(Tool* t);

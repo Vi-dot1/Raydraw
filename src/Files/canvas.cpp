@@ -1,11 +1,10 @@
-#include "Files.hpp"
-#include "canvas.hpp"
-#include "raylib.h"
 
-
-#include <cstddef>
 #include <filesystem>
 #include <fstream>
+
+#include "canvas.hpp"
+#include "Tools/canvas.hpp"
+#include "raylib.h"
 
 
 namespace fs = std::filesystem;
@@ -25,18 +24,19 @@ unsigned long computeHash(const char* bytes, int size)
 }
 
 // Grabs the current canvas an creates a png image from it
-void saveCanvasAsPng(const std::string pathStr, Canvas& c)
+bool saveCanvasAsPng(const std::string pathStr, Canvas& c)
 {
     fs::path path(pathStr);
 
     // Validations
     if( fs::is_directory(path) || path.extension() != ".png" )
     {
-        return;
+        return false;
     }
 
     // Then the whole image exporting is up to raylib
     ExportImage(c._exportImage(), path.c_str());
+    return true;
 }
 
 // Saves file as an .rdraw file
@@ -88,10 +88,8 @@ CanvasData loadRdrawFile(const std::string pathStr)
         cData.layerData.emplace_back(
             Image{
                 data, 
-                cData.props.width, 
-                cData.props.height, 
-                1, 
-                cData.props.format
+                cData.props.width, cData.props.height, 
+                1, cData.props.format
         });
     }
 
